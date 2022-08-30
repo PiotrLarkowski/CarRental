@@ -12,7 +12,7 @@ public interface CarsService {
 
     Car createCar(CarDto carDto);
 
-    Optional<Car> updateCar(CarDto carDto, String id);
+    Car updateCar(CarDto carDto, String id) throws Exception;
 
     Collection<Car> getAllCars();
 

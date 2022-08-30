@@ -5,11 +5,13 @@ import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domainDto.CarDto;
 import com.example.carrental.service.CarsService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/car")
@@ -29,14 +31,11 @@ public class CarsController {
         return carsService.createCar(carDto);
     }
 
-//    @PutMapping(path = "/{id}")
-//    public ResponseEntity<Car> updateCar(@RequestBody CarDto carDto, @PathVariable String id) {
-//        Optional<Car> updatedCar = carsService.updateCar(carDto, id);
-//        if (updatedCar.isEmpty()) {
-//            return ResponseEntity.notFound();
-//        }
-//        return ResponseEntity.ok();
-//    }
+    @PutMapping(path = "/{id}")
+    public Car updateCar(@RequestBody CarDto carDto, @PathVariable String id) throws Exception {
+        Car car = carsService.updateCar(carDto, id);
+        return car;
+    }
 
     @GetMapping
     public Collection<Car> getAllCars() {
@@ -59,11 +58,11 @@ public class CarsController {
     }
 
     @GetMapping(path = "/{id}")
-    public Car getCarById(@PathVariable String id) {
+    public ResponseEntity<?> getCarById(@PathVariable String id) {
         if(id.isEmpty()) {
-
+            return new OwnExceptionHandler().getResponseHttpNotFound();
         }
-        return carsService.getCarById(id).get();
+        return new ResponseEntity<>(carsService.getCarById(id).get(), HttpStatus.OK);
     }
 
 

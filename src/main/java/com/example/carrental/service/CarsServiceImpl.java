@@ -1,6 +1,8 @@
 package com.example.carrental.service;
 
+import com.example.carrental.controller.OwnExceptionHandler;
 import com.example.carrental.domain.Car.Car;
+import com.example.carrental.domain.Car.CarRentException;
 import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domainDto.CarDto;
 import com.example.carrental.repository.CarsRepository;
@@ -30,17 +32,14 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public Optional<Car> updateCar(CarDto carDto, String id) {
+    public Car updateCar(CarDto carDto, String id) throws Exception{
         System.out.println("UPDATING car");
-        Optional<Car> carToUpdate = getCarById(id);
-        if(carToUpdate.isEmpty()) {
-            return carToUpdate;
-        }
-        Car foundCar = carToUpdate.get();
-        Car updatedCar = new Car(foundCar.getId(), carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
-                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice());
-        carsRepository.save(updatedCar);
-        return Optional.of(updatedCar);
+        Car carToUpdate = getCarById(id)
+                .map(car -> new Car(car.getId(), carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
+                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice()))
+                .orElseThrow(() -> new CarRentException("No car found by get id"));
+        carsRepository.save(carToUpdate);
+        return carToUpdate;
     }
 
     @Override
