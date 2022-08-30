@@ -1,20 +1,20 @@
 package com.example.carrental.service;
 
-import com.example.carrental.domain.Car;
-import com.example.carrental.domain.CarStatus;
+import com.example.carrental.domain.Car.Car;
+import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domainDto.CarDto;
 
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface CarService {
+public interface CarsService {
 
     Car createCar(CarDto carDto);
 
     Optional<Car> updateCar(CarDto carDto, String id);
 
-    Collection<Car> getAllCar();
+    Collection<Car> getAllCars();
 
     Collection<Car> filterCarsByStatus(CarStatus carStatus);
 

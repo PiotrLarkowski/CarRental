@@ -1,6 +1,6 @@
 package com.example.carrental.domainDto;
 
-import com.example.carrental.domain.CarStatus;
+import com.example.carrental.domain.Car.CarStatus;
 import lombok.*;
 
 import java.math.BigDecimal;

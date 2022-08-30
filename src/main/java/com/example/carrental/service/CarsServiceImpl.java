@@ -1,23 +1,22 @@
 package com.example.carrental.service;
 
-import com.example.carrental.domain.Car;
-import com.example.carrental.domain.CarStatus;
+import com.example.carrental.domain.Car.Car;
+import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domainDto.CarDto;
 import com.example.carrental.repository.CarsRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class CarServiceImpl implements CarService {
+public class CarsServiceImpl implements CarsService {
 
     private final CarsRepository carsRepository;
 
-    public CarServiceImpl(CarsRepository carsRepository) {
+    public CarsServiceImpl(CarsRepository carsRepository) {
         this.carsRepository = carsRepository;
     }
 
@@ -45,7 +44,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Collection<Car> getAllCar() {
+    public Collection<Car> getAllCars() {
         System.out.println("GET ALL cars");
         return carsRepository.findAll();
     }
@@ -55,7 +54,7 @@ public class CarServiceImpl implements CarService {
         System.out.println("FILTER_BY_STATUS cars");
         Optional<CarStatus> optionalCarStatus = Optional.of(carStatus);
         if (optionalCarStatus.isPresent()) {
-            return carsRepository.filterCarsByStatus(carStatus);
+            return carsRepository.findCarsByStatus(carStatus);
         }
         return carsRepository.findAll();
     }
@@ -65,7 +64,7 @@ public class CarServiceImpl implements CarService {
         System.out.println("FILTER_BY_BODY_TYPE cars");
         Optional<String> optionalBodyType = Optional.of(bodyType);
         if(optionalBodyType.isPresent()) {
-            return carsRepository.filterCarsByBodyType(bodyType);
+            return carsRepository.findCarsByBodyType(bodyType);
         }
         return carsRepository.findAll();
     }
@@ -75,7 +74,7 @@ public class CarServiceImpl implements CarService {
         System.out.println("FILTER_BY_PRICE cars");
         Optional<BigDecimal> optionalPrice = Optional.of(price);
         if(optionalPrice.isPresent()) {
-            return carsRepository.filterCarsByPrice(price);
+            return carsRepository.findCarsByPrice(price);
         }
         return carsRepository.findAll();
     }

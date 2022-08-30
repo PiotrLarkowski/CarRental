@@ -1,7 +1,8 @@
-package com.example.carrental.domain;
+package com.example.carrental.domain.Car;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 @Builder
 public class Car {
     @Id
+    @Column(nullable = false)
     private String id;
     private String mark;
     private String model;
