@@ -1,4 +1,4 @@
-package com.example.carrental.domain;
+package com.example.carrental.domain.Client;
 
 import lombok.*;
 
