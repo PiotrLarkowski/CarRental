@@ -9,11 +9,11 @@ import java.util.Collection;
 
 public interface CarsRepository extends JpaRepository<Car, String> {
 
-    Collection<Car> findCarsByStatus(CarStatus carStatus);
+    Collection<Car> findByCarStatus(CarStatus carStatus);
 
-    Collection<Car> findCarsByBodyType(String bodyType);
+    Collection<Car> findByBodyType(String bodyType);
 
-    Collection<Car> findCarsByPrice(BigDecimal price);
+    Collection<Car> findByDayPrice(BigDecimal price);
 
 
 }

@@ -50,11 +50,11 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public Collection<Car> filterCarsByStatus(CarStatus carStatus) {
+    public Collection<Car> filterCarsByCarStatus(CarStatus carStatus) {
         System.out.println("FILTER_BY_STATUS cars");
         Optional<CarStatus> optionalCarStatus = Optional.of(carStatus);
         if (optionalCarStatus.isPresent()) {
-            return carsRepository.findCarsByStatus(carStatus);
+            return carsRepository.findByCarStatus(carStatus);
         }
         return carsRepository.findAll();
     }
@@ -64,17 +64,17 @@ public class CarsServiceImpl implements CarsService {
         System.out.println("FILTER_BY_BODY_TYPE cars");
         Optional<String> optionalBodyType = Optional.of(bodyType);
         if(optionalBodyType.isPresent()) {
-            return carsRepository.findCarsByBodyType(bodyType);
+            return carsRepository.findByBodyType(bodyType);
         }
         return carsRepository.findAll();
     }
 
     @Override
-    public Collection<Car> filterCarsByPrice(BigDecimal price) {
+    public Collection<Car> filterCarsByDayPrice(BigDecimal price) {
         System.out.println("FILTER_BY_PRICE cars");
         Optional<BigDecimal> optionalPrice = Optional.of(price);
         if(optionalPrice.isPresent()) {
-            return carsRepository.findCarsByPrice(price);
+            return carsRepository.findByDayPrice(price);
         }
         return carsRepository.findAll();
     }

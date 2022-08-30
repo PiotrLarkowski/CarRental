@@ -5,13 +5,11 @@ import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domainDto.CarDto;
 import com.example.carrental.service.CarsService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/car")
@@ -47,7 +45,7 @@ public class CarsController {
 
     @GetMapping(path = "/filterByCarStatus/{carStatus}")
     public Collection<Car> filterCarsByStatus(@PathVariable @Valid CarStatus carStatus) {
-        return carsService.filterCarsByStatus(carStatus);
+        return carsService.filterCarsByCarStatus(carStatus);
     }
 
     @GetMapping(path = "/filterByBodyType/{bodyType}")
@@ -57,7 +55,7 @@ public class CarsController {
 
     @GetMapping(path = "/filterByPrice/{price}")
     public Collection<Car> filterCarsByPrice(@PathVariable BigDecimal price) {
-        return carsService.filterCarsByPrice(price);
+        return carsService.filterCarsByDayPrice(price);
     }
 
     @GetMapping(path = "/{id}")

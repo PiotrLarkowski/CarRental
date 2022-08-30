@@ -16,11 +16,11 @@ public interface CarsService {
 
     Collection<Car> getAllCars();
 
-    Collection<Car> filterCarsByStatus(CarStatus carStatus);
+    Collection<Car> filterCarsByCarStatus(CarStatus carStatus);
 
     Collection<Car> filterCarsByBodyType(String bodyType);
 
-    Collection<Car> filterCarsByPrice(BigDecimal price);
+    Collection<Car> filterCarsByDayPrice(BigDecimal price);
 
     Optional<Car> getCarById(String id);
 
