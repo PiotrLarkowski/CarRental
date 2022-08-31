@@ -15,5 +15,5 @@ public interface CarsRepository extends JpaRepository<Car, String> {
 
     Collection<Car> findByDayPrice(BigDecimal price);
 
-
+    void deleteById(String id);
 }

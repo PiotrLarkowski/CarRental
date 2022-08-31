@@ -88,12 +88,12 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public Car deleteCarById(String id) {
+    public void deleteCarById(String id) {
         Optional<String> optionalID = Optional.of(id);
         if(optionalID.isEmpty()) {
             new CarRentException("No car found by id");
         }
+        System.out.println("DELETE car");
         carsRepository.deleteById(id);
-        return getCarById(id).get();
     }
 }
