@@ -24,6 +24,6 @@ public interface CarsService {
 
     Optional<Car> getCarById(String id);
 
-    Optional<Car> deleteCarById(String id);
+    Car deleteCarById(String id);
 
 }

@@ -38,6 +38,7 @@ public class CarsController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.FOUND)
     public Collection<Car> getAllCars() {
         return carsService.getAllCars();
     }
@@ -63,6 +64,13 @@ public class CarsController {
             return new OwnExceptionHandler().getResponseHttpNotFound();
         }
         return new ResponseEntity<>(carsService.getCarById(id).get(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteCar(@PathVariable String id) {
+        System.out.println("DELETE car");
+        carsService.deleteCarById(id);
     }
 
 

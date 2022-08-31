@@ -1,6 +1,5 @@
 package com.example.carrental.service;
 
-import com.example.carrental.controller.OwnExceptionHandler;
 import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarRentException;
 import com.example.carrental.domain.Car.CarStatus;
@@ -89,11 +88,12 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public Optional<Car> deleteCarById(String id) {
+    public Car deleteCarById(String id) {
         Optional<String> optionalID = Optional.of(id);
-        if(optionalID.isPresent()) {
-            carsRepository.deleteById(id);
+        if(optionalID.isEmpty()) {
+            new CarRentException("No car found by id");
         }
-        return Optional.of(null);
+        carsRepository.deleteById(id);
+        return getCarById(id).get();
     }
 }
