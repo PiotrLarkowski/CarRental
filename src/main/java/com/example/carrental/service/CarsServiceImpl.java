@@ -84,7 +84,7 @@ public class CarsServiceImpl implements CarsService {
         if(optionalID.isPresent()) {
             return carsRepository.findById(id);
         }
-        return carsRepository.findById(id);
+        return Optional.ofNullable(null);
     }
 
     @Override
