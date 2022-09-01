@@ -1,4 +1,4 @@
-package com.example.carrental.domainDto;
+package com.example.carrental.domainDto.CarDto;
 
 import com.example.carrental.domain.Car.CarStatus;
 import lombok.*;

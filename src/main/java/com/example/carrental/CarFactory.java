@@ -1,9 +1,8 @@
 package com.example.carrental;
 
-import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarStatus;
-import com.example.carrental.domainDto.CarDto;
-import com.example.carrental.service.CarsService;
+import com.example.carrental.domainDto.CarDto.CarDto;
+import com.example.carrental.service.CarService.CarsService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
