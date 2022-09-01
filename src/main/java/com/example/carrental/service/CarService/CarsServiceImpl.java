@@ -1,9 +1,9 @@
-package com.example.carrental.service;
+package com.example.carrental.service.CarService;
 
 import com.example.carrental.domain.Car.Car;
-import com.example.carrental.domain.Car.CarRentException;
+import com.example.carrental.domain.Car.CarException;
 import com.example.carrental.domain.Car.CarStatus;
-import com.example.carrental.domainDto.CarDto;
+import com.example.carrental.domainDto.CarDto.CarDto;
 import com.example.carrental.repository.CarsRepository;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +36,7 @@ public class CarsServiceImpl implements CarsService {
         Car carToUpdate = getCarById(id)
                 .map(car -> new Car(car.getId(), carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
                 carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice()))
-                .orElseThrow(() -> new CarRentException("No car found by get id"));
+                .orElseThrow(() -> new CarException("No car found by get id"));
         carsRepository.save(carToUpdate);
         return carToUpdate;
     }
@@ -91,7 +91,7 @@ public class CarsServiceImpl implements CarsService {
     public void deleteCarById(String id) {
         Optional<String> optionalID = Optional.of(id);
         if(optionalID.isEmpty()) {
-            new CarRentException("No car found by id");
+            new CarException("No car found by id");
         }
         System.out.println("DELETE car");
         carsRepository.deleteById(id);

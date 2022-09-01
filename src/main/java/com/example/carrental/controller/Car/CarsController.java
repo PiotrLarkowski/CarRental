@@ -1,9 +1,10 @@
-package com.example.carrental.controller;
+package com.example.carrental.controller.Car;
 
+import com.example.carrental.controller.OwnExceptionHandler;
 import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarStatus;
-import com.example.carrental.domainDto.CarDto;
-import com.example.carrental.service.CarsService;
+import com.example.carrental.domainDto.CarDto.CarDto;
+import com.example.carrental.service.CarService.CarsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/car")
@@ -33,8 +33,7 @@ public class CarsController {
 
     @PutMapping(path = "/{id}")
     public Car updateCar(@RequestBody CarDto carDto, @PathVariable String id) throws Exception {
-        Car car = carsService.updateCar(carDto, id);
-        return car;
+        return carsService.updateCar(carDto, id);
     }
 
     @GetMapping

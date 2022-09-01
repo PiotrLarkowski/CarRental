@@ -1,6 +1,7 @@
 package com.example.carrental.controller;
 
-import com.example.carrental.domain.Car.CarRentException;
+import com.example.carrental.domain.Car.CarException;
+import com.example.carrental.domain.User.UserException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,7 +10,7 @@ import org.springframework.web.client.HttpClientErrorException;
 @ControllerAdvice
 public class OwnExceptionHandler {
 //bledy domenowe, związane z funkcjonalnością
-    @ExceptionHandler({CarRentException.class})
+    @ExceptionHandler({CarException.class})
     public ResponseEntity<?> getResponseHttpNotFound() {
         return ResponseEntity.notFound().build();
     }
@@ -19,4 +20,8 @@ public class OwnExceptionHandler {
         return ResponseEntity.badRequest().build();
     }
 
+    @ExceptionHandler({UserException.class})
+    public ResponseEntity<?> getResponseHttpClientNotFound(){
+        return ResponseEntity.notFound().build();
+    }
 }

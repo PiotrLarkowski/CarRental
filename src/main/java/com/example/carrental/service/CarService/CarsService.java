@@ -1,8 +1,8 @@
-package com.example.carrental.service;
+package com.example.carrental.service.CarService;
 
 import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarStatus;
-import com.example.carrental.domainDto.CarDto;
+import com.example.carrental.domainDto.CarDto.CarDto;
 
 import java.math.BigDecimal;
 import java.util.Collection;
