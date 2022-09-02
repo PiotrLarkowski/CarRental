@@ -1,6 +1,5 @@
 package com.example.carrental.service.UserService;
 
-import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.User.User;
 import com.example.carrental.domainDto.UserDto.UserDto;
 

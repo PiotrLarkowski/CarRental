@@ -2,7 +2,6 @@ package com.example.carrental.controller.User;
 
 import com.example.carrental.controller.OwnExceptionHandler;
 import com.example.carrental.domain.User.User;
-import com.example.carrental.domainDto.CarDto.CarDto;
 import com.example.carrental.domainDto.UserDto.UserDto;
 import com.example.carrental.service.UserService.UsersService;
 import org.springframework.http.HttpStatus;

@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Getter
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
+@Table(name="CarRentalUser")
 public class User {
 
     @Id
@@ -24,8 +26,6 @@ public class User {
     private String userName;
 
     private String userLastName;
-
-    //TODO wiek klienta
 
     private String userEMail;
 
