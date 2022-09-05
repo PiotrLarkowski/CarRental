@@ -33,12 +33,16 @@ public class CarsServiceImpl implements CarsService {
     @Override
     public Car updateCar(CarDto carDto, String id) throws Exception{
         System.out.println("UPDATING car");
-        Car carToUpdate = getCarById(id)
-                .map(car -> new Car(car.getId(), carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
-                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice()))
-                .orElseThrow(() -> new CarException("No car found by get id"));
-        carsRepository.save(carToUpdate);
-        return carToUpdate;
+        Car carToUpdate = getCarById(id);
+
+        Car car = new Car(carToUpdate.getId(), carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
+                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice());
+//
+//                .map(car -> new Car(car.getId(), carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
+//                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice()))
+
+        carsRepository.save(car);
+        return car;
     }
 
     @Override
@@ -50,6 +54,7 @@ public class CarsServiceImpl implements CarsService {
     @Override
     public Collection<Car> filterCarsByCarStatus(CarStatus carStatus) {
         System.out.println("FILTER_BY_STATUS cars");
+
         Optional<CarStatus> optionalCarStatus = Optional.of(carStatus);
         if (optionalCarStatus.isPresent()) {
             return carsRepository.findByCarStatus(carStatus);
@@ -78,22 +83,27 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public Optional<Car> getCarById(String id) {
+    public Car getCarById(String id) throws CarException {
         System.out.println("FILTER_BY_ID cars");
-        Optional<String> optionalID = Optional.of(id);
-        if(optionalID.isPresent()) {
-            return carsRepository.findById(id);
-        }
-        return Optional.ofNullable(null);
+
+        return validCarId(id);
+
+
+//        Optional<String> optionalID = Optional.of(id);
+//        if(optionalID.isPresent()) {
+//            return carsRepository.findById(id);
+//        }
+//        return Optional.ofNullable(null);
     }
 
     @Override
-    public void deleteCarById(String id) {
-        Optional<String> optionalID = Optional.of(id);
-        if(optionalID.isEmpty()) {
-            new CarException("No car found by id");
-        }
+    public void deleteCarById(String id) throws CarException {
+        Car car = validCarId(id);
         System.out.println("DELETE car");
-        carsRepository.deleteById(id);
+        carsRepository.deleteById(car.getId());
+    }
+
+    private Car validCarId(String id) throws CarException {
+       return carsRepository.findById(id).orElseThrow(() -> new CarException("couldn't find specific id"));
     }
 }

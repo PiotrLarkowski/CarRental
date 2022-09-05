@@ -72,36 +72,47 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void rentCar(String userId, String carId) throws Exception{
-        changeCarStatusByUser(userId, carId, CarStatus.RENTED);
+    public void rentCar(String userId, String carId) throws Exception {
+
     }
 
     @Override
     public void returnCar(String userId, String carId) throws Exception {
-        changeCarStatusByUser(userId, carId, CarStatus.AVAILABLE);
+
     }
+//
+//    @Override
+//    public void rentCar(String userId, String carId) throws Exception{
+//        changeCarStatusByUser(userId, carId, CarStatus.RENTED);
+//    }
+//
+//    @Override
+//    public void returnCar(String userId, String carId) throws Exception {
+//        changeCarStatusByUser(userId, carId, CarStatus.AVAILABLE);
+//    }
 
-    private Car changeCarStatusByUser(String userId, String carId, CarStatus carStatus) throws Exception {
-        User user = getUserById(userId)
-                .orElseThrow(() -> new UserException("No client with given ID"));
-        if(!user.getUserCarId().equals(null)) {
-            new CarException("User has already rented car");
-        }
-        CarDto carToRent = carsService.getCarById(carId)
-                .filter(availableCar -> availableCar.getCarStatus().equals(CarStatus.AVAILABLE))
-                .map(carStream -> new CarDto(carStream.getMark(), carStream.getModel(), carStream.getBodyType(),
-                        carStream.getYearOfProduction(), carStream.getColour(), carStream.getRun(),
-                        carStatus, carStream.getDayPrice()))
-                .orElseThrow(() -> new CarException("No car with given ID or car is not available"));
-        carsService.updateCar(carToRent, carId);
+//    private Car changeCarStatusByUser(String userId, String carId, CarStatus carStatus) throws Exception {
+//        User user = getUserById(userId)
+//                .orElseThrow(() -> new UserException("No client with given ID"));
+//        if(!user.getUserCarId().equals(null)) {
+//            new CarException("User has already rented car");
+//        }
+//        CarDto carToRent = carsService.getCarById(carId)
+//                .filter(availableCar -> availableCar.getCarStatus().equals(CarStatus.AVAILABLE))
+//                .map(carStream -> new CarDto(carStream.getMark(), carStream.getModel(), carStream.getBodyType(),
+//                        carStream.getYearOfProduction(), carStream.getColour(), carStream.getRun(),
+//                        carStatus, carStream.getDayPrice()))
+//                .orElseThrow(() -> new CarException("No car with given ID or car is not available"));
+//        carsService.updateCar(carToRent, carId);
+//
+//        if(carStatus.equals(CarStatus.AVAILABLE)){
+//            user.setUserCarId(carId);
+//        }else{
+//            user.setUserCarId("");
+//        }
+//
+//        userRepository.save(user);
+//        return carsService.getCarById(carId).get();
+//    }
 
-        if(carStatus.equals(CarStatus.AVAILABLE)){
-            user.setUserCarId(carId);
-        }else{
-            user.setUserCarId("");
-        }
-
-        userRepository.save(user);
-        return carsService.getCarById(carId).get();
-    }
 }

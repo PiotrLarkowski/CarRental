@@ -1,12 +1,12 @@
 package com.example.carrental.service.CarService;
 
 import com.example.carrental.domain.Car.Car;
+import com.example.carrental.domain.Car.CarException;
 import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domainDto.CarDto.CarDto;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Optional;
 
 public interface CarsService {
 
@@ -22,8 +22,8 @@ public interface CarsService {
 
     Collection<Car> filterCarsByDayPrice(BigDecimal price);
 
-    Optional<Car> getCarById(String id);
+    Car getCarById(String id) throws CarException;
 
-    void deleteCarById(String id);
+    void deleteCarById(String id) throws CarException;
 
 }

@@ -1,7 +1,7 @@
 package com.example.carrental.controller.Car;
 
-import com.example.carrental.controller.OwnExceptionHandler;
 import com.example.carrental.domain.Car.Car;
+import com.example.carrental.domain.Car.CarException;
 import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domainDto.CarDto.CarDto;
 import com.example.carrental.service.CarService.CarsService;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/car")
@@ -57,17 +58,22 @@ public class CarsController {
         return carsService.filterCarsByDayPrice(price);
     }
 
+//    @GetMapping(path = "/{id}")
+//    public ResponseEntity<?> getCarById(@PathVariable String id) {
+//        if(id.isEmpty()) {
+//            return new OwnExceptionHandler().getResponseHttpNotFound();
+//        }
+//        return new ResponseEntity<>(carsService.getCarById(id).get(), HttpStatus.OK);
+//    }
+
     @GetMapping(path = "/{id}")
-    public ResponseEntity<?> getCarById(@PathVariable String id) {
-        if(id.isEmpty()) {
-            return new OwnExceptionHandler().getResponseHttpNotFound();
-        }
-        return new ResponseEntity<>(carsService.getCarById(id).get(), HttpStatus.OK);
+    public ResponseEntity<Car> getCarById(@PathVariable String id) throws CarException {
+        return new ResponseEntity<>(carsService.getCarById(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteCar(@PathVariable String id) {
+    public void deleteCar(@PathVariable String id) throws CarException {
         carsService.deleteCarById(id);
     }
 

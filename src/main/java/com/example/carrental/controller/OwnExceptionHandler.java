@@ -24,4 +24,5 @@ public class OwnExceptionHandler {
     public ResponseEntity<?> getResponseHttpClientNotFound(){
         return ResponseEntity.notFound().build();
     }
+
 }
