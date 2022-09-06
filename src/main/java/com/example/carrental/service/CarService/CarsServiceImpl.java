@@ -37,9 +37,6 @@ public class CarsServiceImpl implements CarsService {
 
         Car car = new Car(carToUpdate.getId(), carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
                 carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice());
-//
-//                .map(car -> new Car(car.getId(), carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
-//                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice()))
 
         carsRepository.save(car);
         return car;
@@ -48,37 +45,6 @@ public class CarsServiceImpl implements CarsService {
     @Override
     public Collection<Car> getAllCars() {
         System.out.println("GET ALL cars");
-        return carsRepository.findAll();
-    }
-
-    @Override
-    public Collection<Car> filterCarsByCarStatus(CarStatus carStatus) {
-        System.out.println("FILTER_BY_STATUS cars");
-
-        Optional<CarStatus> optionalCarStatus = Optional.of(carStatus);
-        if (optionalCarStatus.isPresent()) {
-            return carsRepository.findByCarStatus(carStatus);
-        }
-        return carsRepository.findAll();
-    }
-
-    @Override
-    public Collection<Car> filterCarsByBodyType(String bodyType) {
-        System.out.println("FILTER_BY_BODY_TYPE cars");
-        Optional<String> optionalBodyType = Optional.of(bodyType);
-        if(optionalBodyType.isPresent()) {
-            return carsRepository.findByBodyType(bodyType);
-        }
-        return carsRepository.findAll();
-    }
-
-    @Override
-    public Collection<Car> filterCarsByDayPrice(BigDecimal price) {
-        System.out.println("FILTER_BY_PRICE cars");
-        Optional<BigDecimal> optionalPrice = Optional.of(price);
-        if(optionalPrice.isPresent()) {
-            return carsRepository.findByDayPrice(price);
-        }
         return carsRepository.findAll();
     }
 
@@ -106,4 +72,5 @@ public class CarsServiceImpl implements CarsService {
     private Car validCarId(String id) throws CarException {
        return carsRepository.findById(id).orElseThrow(() -> new CarException("couldn't find specific id"));
     }
+
 }

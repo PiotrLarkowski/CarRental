@@ -43,20 +43,20 @@ public class CarsController {
         return carsService.getAllCars();
     }
 
-    @GetMapping(path = "/filterByCarStatus/{carStatus}")
-    public Collection<Car> filterCarsByStatus(@PathVariable @Valid CarStatus carStatus) {
-        return carsService.filterCarsByCarStatus(carStatus);
-    }
-
-    @GetMapping(path = "/filterByBodyType/{bodyType}")
-    public Collection<Car> filterCarsByBodyType(@PathVariable String bodyType) {
-        return carsService.filterCarsByBodyType(bodyType);
-    }
-
-    @GetMapping(path = "/filterByPrice/{price}")
-    public Collection<Car> filterCarsByPrice(@PathVariable BigDecimal price) {
-        return carsService.filterCarsByDayPrice(price);
-    }
+//    @GetMapping(path = "/filterByCarStatus/{carStatus}")
+//    public Collection<Car> filterCarsByStatus(@PathVariable @Valid CarStatus carStatus) {
+//        return carsService.filterCarsByCarStatus(carStatus);
+//    }
+//
+//    @GetMapping(path = "/filterByBodyType/{bodyType}")
+//    public Collection<Car> filterCarsByBodyType(@PathVariable String bodyType) {
+//        return carsService.filterCarsByBodyType(bodyType);
+//    }
+//
+//    @GetMapping(path = "/filterByPrice/{price}")
+//    public Collection<Car> filterCarsByPrice(@PathVariable BigDecimal price) {
+//        return carsService.filterCarsByDayPrice(price);
+//    }
 
 //    @GetMapping(path = "/{id}")
 //    public ResponseEntity<?> getCarById(@PathVariable String id) {

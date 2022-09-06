@@ -20,8 +20,4 @@ public interface UsersService {
 
     void deleteUserById(String id) throws Exception;
 
-    void rentCar(String userId, String carId) throws Exception;
-
-    void returnCar(String userId, String carId) throws Exception;
-
 }

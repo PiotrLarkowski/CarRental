@@ -16,12 +16,6 @@ public interface CarsService {
 
     Collection<Car> getAllCars();
 
-    Collection<Car> filterCarsByCarStatus(CarStatus carStatus);
-
-    Collection<Car> filterCarsByBodyType(String bodyType);
-
-    Collection<Car> filterCarsByDayPrice(BigDecimal price);
-
     Car getCarById(String id) throws CarException;
 
     void deleteCarById(String id) throws CarException;
