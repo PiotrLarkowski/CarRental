@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,25 +87,63 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         Optional<BigDecimal> optionalPrice = Optional.of(price);
         if(optionalPrice.isPresent()) {
             return carsService.getAllCars().stream()
-                    .filter(car -> car.getDayPrice().compareTo(price) > 0)
+                    .filter(car -> car.getDayPrice().compareTo(price) => 0 //????????????
+                    .collect(Collectors.toList());
+        }
+        return carsService.getAllCars();
+    }
+
+
+    @Override
+    public Collection<Car> filterCarsByYearOfProduction(int yearOfProduction) {
+        Optional<Integer> optionalPrice = Optional.of(yearOfProduction);
+        if(optionalPrice.isPresent()) {
+            return carsService.getAllCars().stream()
+                    .filter(car -> car.getYearOfProduction().equals(yearOfProduction)) //????????????
                     .collect(Collectors.toList());
         }
         return carsService.getAllCars();
     }
 
     @Override
-    public Collection<Car> filterCarsByYearOfProduction(int yearOfProduction) {
-        return null;
+    public List<Car> filterCarsByMark(String mark) {
+        Optional.of(mark)
+                .map (getAllCarsByMark (mark))
+                .orElse(carsService.getAllCars());
+
+
+
+
+
+
+
+
+
+
+        if(optionalMark.isPresent()) {
+            return carsService.getAllCars().stream()
+                    .filter(car -> car.getMark().equals(mark)) //????????????
+                    .collect(Collectors.toList());
+        }
+        return carsService.getAllCars();
+    }
+
+    private Function<String, List<Car>> getAllCarsByMark(String mark) {
+        return m -> carsService.getAllCars().stream()
+                .filter(car -> car.getMark().equals(mark)) //????????????
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Collection<Car> filterCarsByMark(String mark) {
-        return null;
-    }
+    public User findUserByLogin(String login) throws Exception{
+        Optional<String> optionalLogin = Optional.of(login);
+        if(optionalLogin.isPresent()) {
+            return usersService.getAllUsers().stream()
+                    .filter(user -> user.getUserLogin().equals(login))
+                    .findFirst().orElseThrow()
 
-    @Override
-    public User findUserByLogin(String login) {
-        return null;
+        }
+        return new User();
     }
 
     @Override
@@ -134,6 +174,12 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
 
         userRepository.save(user);
         return carsService.getCarById(carId).get();
+    }
+
+    private boolean isInRange(BigDecimal price, BigDecimal from, BigDecimal to) {
+//        price.compareTo( price )  > 0  && price.compareTo( to  )< 0
+            // price is larger than 500 and less than 1000
+        return null;
     }
 
 

@@ -31,7 +31,7 @@ public interface CarRentalOfficeService {
 
     Collection<Car> filterCarsByMark(String mark);
 
-    User findUserByLogin(String login);
+    User findUserByLogin(String login) throws Exception;
 
     User findUserByEmail(String email);
 
