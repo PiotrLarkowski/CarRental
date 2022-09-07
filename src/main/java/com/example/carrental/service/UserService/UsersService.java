@@ -4,6 +4,7 @@ import com.example.carrental.domain.User.User;
 import com.example.carrental.domainDto.UserDto.UserDto;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface UsersService {
@@ -12,7 +13,7 @@ public interface UsersService {
 
     User updateUser(UserDto userDto, String id) throws Exception;
 
-    Collection<User> getAllUsers();
+    List<User> getAllUsers();
 
     //TODO Zwraa ilosc wypozyczonych aut
 

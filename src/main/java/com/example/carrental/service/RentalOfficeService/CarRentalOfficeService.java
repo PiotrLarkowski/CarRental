@@ -8,12 +8,13 @@ import com.example.carrental.domain.User.User;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 public interface CarRentalOfficeService {
 
     CarRentalOffice getCarRentalOfficeById(String id);
 
-    Collection<CarRentalOffice> getAllCarRentalOffices();
+    List<CarRentalOffice> getAllCarRentalOffices();
 
     CarRentalOffice getCarRentalOfficeByDateTime (LocalDateTime dateTime);
 
@@ -21,15 +22,15 @@ public interface CarRentalOfficeService {
 
     void returnACar(String userId, String carId) throws Exception;
 
-    Collection<Car> filterCarsByCarStatus(CarStatus carStatus);
+    List<Car> filterCarsByCarStatus(CarStatus carStatus);
 
-    Collection<Car> filterCarsByBodyType(String bodyType);
+    List<Car> filterCarsByBodyType(String bodyType);
 
-    Collection<Car> filterCarsByDayPrice(BigDecimal price);
+    List<Car> filterCarsByDayPrice(BigDecimal from, BigDecimal to);
 
-    Collection<Car> filterCarsByYearOfProduction(int yearOfProduction);
+    List<Car> filterCarsByYearOfProduction(int yearOfProduction);
 
-    Collection<Car> filterCarsByMark(String mark);
+    List<Car> filterCarsByMark(String mark);
 
     User findUserByLogin(String login) throws Exception;
 

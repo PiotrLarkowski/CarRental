@@ -2,6 +2,7 @@ package com.example.carrental.domain.User;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -12,13 +13,13 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@ToString
 @Table(name="CarRentalUser")
 public class User {
 
     @Id
     private String userId;
 
+    @Column(unique = true)
     private String userLogin;
 
     private String userPassword;
@@ -27,6 +28,7 @@ public class User {
 
     private String userLastName;
 
+    @Column(unique = true)
     private String userEMail;
 
     private String userAddress;

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -43,7 +44,7 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public Collection<Car> getAllCars() {
+    public List<Car> getAllCars() {
         System.out.println("GET ALL cars");
         return carsRepository.findAll();
     }
