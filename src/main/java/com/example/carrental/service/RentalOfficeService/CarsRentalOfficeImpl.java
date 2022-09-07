@@ -16,13 +16,10 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class CarsRentalOfficeImpl implements CarRentalOfficeService {
@@ -70,25 +67,18 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
     @Override
     public List<Car> filterCarsByCarStatus(CarStatus carStatus) {
         System.out.println("FILTER_BY_STATUS cars");
-        Optional<CarStatus> optionalCarStatus = Optional.of(carStatus);
-        if (optionalCarStatus.isPresent()) {
-            return carsService.getAllCars().stream()
-                    .filter(car -> car.getCarStatus().equals(carStatus))
-                    .collect(Collectors.toList());
-        }
-        return carsService.getAllCars();
+        return carsService.getAllCars().stream()
+                .filter(car -> car.getCarStatus().equals(carStatus))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Car> filterCarsByBodyType(String bodyType) {
         System.out.println("FILTER_BY_BODY_TYPE cars");
-        Optional<String> optionalBodyType = Optional.of(bodyType);
-        if(optionalBodyType.isPresent()) {
-            return carsService.getAllCars().stream()
-                    .filter(car -> car.getBodyType().equals(bodyType))
-                    .collect(Collectors.toList());
-        }
-        return carsService.getAllCars();
+        return carsService.getAllCars().stream()
+                .filter(car -> car.getBodyType().equals(bodyType))
+                .collect(Collectors.toList());
+
     }
 
     @Override
@@ -141,36 +131,63 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
                 .findFirst().orElseThrow(() -> new UserException("Not found User with given E-mail"));
     }
 
-    private void changeCarStatusByUser(String userId, String carId, CarStatus carStatus) throws Exception {
-        User user = usersService.getUserById(userId)
-                .orElseThrow(() -> new UserException("No client with given ID"));
-        if(user.getUserCarId() != null) {
-            new CarException("User has already rented car");
+    private void changeCarStatusByUser(String userId, String carId, CarStatus carStatus) throws Exception{
+        User user = getUserById(userId);
+        if(haveUserCarRent(user)) {
+            Car carToRent = getCarById(carId);
+            if (checkCarStatusMatchVariable(carToRent)) {
+                updateCarStatus(carId, carToRent);
+                updateUserCarRentStatus(carId, carStatus, user);
+            }
         }
-        Car carToRent = Optional.of(carsService.getCarById(carId)).orElseThrow(() -> new CarException("No car with given id"));
+    }
 
-        if(carToRent.getCarStatus() == CarStatus.AVAILABLE){
-            carToRent.setCarStatus(CarStatus.RENTED);
-        }
-
-        carsService.updateCar(new CarDto(carToRent.getMark(),carToRent.getModel(),carToRent.getBodyType(),
-                carToRent.getYearOfProduction(),carToRent.getColour(),carToRent.getRun(),
-                carToRent.getCarStatus(), carToRent.getDayPrice()), carId);
-
-        if(carStatus.equals(CarStatus.AVAILABLE)){
+    private void updateUserCarRentStatus(String carId, CarStatus carStatus, User user) throws Exception {
+        if (carStatus.equals(CarStatus.AVAILABLE)) {
             user.setUserCarId(carId);
-        }else{
+        } else {
             user.setUserCarId("");
         }
+        usersService.updateUser(new UserDto(user.getUserLogin(), user.getUserPassword(), user.getUserName()
+                , user.getUserLastName(), user.getUserEMail(), user.getUserAddress(), user.getUserCarId(), user.getRole(), user.getStatus()), user.getUserId());
+    }
 
-        usersService.updateUser(new UserDto(user.getUserLogin(),user.getUserPassword(),user.getUserName()
-                ,user.getUserLastName(),user.getUserEMail(),user.getUserAddress(),user.getUserCarId(),user.getRole(),user.getStatus()),user.getUserId());
+    private void updateCarStatus(String carId, Car carToRent) throws Exception {
+        carsService.updateCar(new CarDto(carToRent.getMark(), carToRent.getModel(), carToRent.getBodyType(),
+                carToRent.getYearOfProduction(), carToRent.getColour(), carToRent.getRun(),
+                carToRent.getCarStatus(), carToRent.getDayPrice()), carId);
+    }
+
+    private boolean checkCarStatusMatchVariable(Car carToRent) {
+        if(carToRent.getCarStatus() == CarStatus.AVAILABLE){
+            carToRent.setCarStatus(CarStatus.RENTED);
+            return true;
+        }
+        return false;
+    }
+
+    private Car getCarById(String carId) throws CarException {
+        Car carToRent = Optional.of(carsService.getCarById(carId)).orElseThrow(() -> new CarException("No car with given id"));
+        return carToRent;
+    }
+
+    private boolean haveUserCarRent(User user) {
+        if(user.getUserCarId() != null) {
+            new CarException("User has already rented car");
+            return false;
+        }
+        return true;
+    }
+
+    private User getUserById(String userId) {
+        User user = usersService.getUserById(userId).orElseThrow(() -> new UserException("No client with given ID"));
+        return user;
     }
 
     private boolean isInRange(BigDecimal price, BigDecimal from, BigDecimal to) {
         return price.compareTo(from)  > 0  && price.compareTo(to) < 0;
-            // price is larger than 500 and less than 1000
     }
+
     private Function<String, List<Car>> getAllCarsByMark(String mark) {
         return m -> carsService.getAllCars().stream()
                 .filter(car -> car.getMark().equals(mark))
