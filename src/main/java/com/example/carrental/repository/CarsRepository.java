@@ -8,12 +8,4 @@ import java.math.BigDecimal;
 import java.util.Collection;
 
 public interface CarsRepository extends JpaRepository<Car, String> {
-
-    Collection<Car> findByCarStatus(CarStatus carStatus);
-
-    Collection<Car> findByBodyType(String bodyType);
-
-    Collection<Car> findByDayPrice(BigDecimal price);
-
-    void deleteById(String id);
 }

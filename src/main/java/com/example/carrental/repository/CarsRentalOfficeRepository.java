@@ -12,6 +12,4 @@ import java.util.Collection;
 import java.util.List;
 
 public interface CarsRentalOfficeRepository extends JpaRepository<CarRentalOffice, String> {
-    CarRentalOffice findCarRentalOfficeById(String id) throws CarRentalOfficeException;
-    List<CarRentalOffice> findCarRentalOfficeByLocalDateTimeOfRent(LocalDateTime localDateTime) throws CarRentalOfficeException;
 }
