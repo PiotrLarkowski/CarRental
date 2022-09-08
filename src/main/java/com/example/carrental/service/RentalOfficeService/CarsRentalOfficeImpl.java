@@ -14,11 +14,10 @@ import com.example.carrental.service.CarService.CarsService;
 import com.example.carrental.service.UserService.UsersService;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +35,22 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         this.usersService = usersService;
     }
 
+    private CarRentalOffice createCarRentalOffice(String userId, String carId) {
+        System.out.println("Creating a rent");
+        CarRentalOffice rent = new CarRentalOffice(UUID.randomUUID().toString(), userId, carId, LocalDateTime.now(), null);
+        carsRentalOfficeRepository.save(rent);
+        return rent;
+    }
+
+    private void updateCarRentalOffice(String carRentalOfficeId){
+        System.out.println("Updating car rental office");
+        CarRentalOffice rentalOfficeToUpdate = carsRentalOfficeRepository.findCarRentalOfficeById(carRentalOfficeId);
+        CarRentalOffice updatedCarRentalOffice = new CarRentalOffice(carRentalOfficeId, rentalOfficeToUpdate.getCarId(),
+                rentalOfficeToUpdate.getUserId(),rentalOfficeToUpdate.getLocalDateTimeOfRent(),
+                rentalOfficeToUpdate.getGetLocalDateTimeOfRetun());
+        carsRentalOfficeRepository.save(updatedCarRentalOffice);
+    }
+
     @Override
     public CarRentalOffice getCarRentalOfficeById(String id) throws CarRentalOfficeException{
         return carsRentalOfficeRepository.findById(id)
@@ -48,101 +63,51 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
     }
 
     @Override
-    public CarRentalOffice getCarRentalOfficeByDateTime(LocalDateTime dateTime) {
-        return Optional.of(carsRentalOfficeRepository
-                .findCarRentalOfficeByDateTime(dateTime))
-                .orElseThrow(() -> new CarRentalOfficeException("Rental not found"));
-    }
-
-    @Override
-    public void rentACar(String userId, String carId) throws Exception{
-        changeCarStatusByUser(userId, carId, CarStatus.RENTED);
-    }
-
-    @Override
-    public void returnACar(String userId, String carId) throws Exception {
-        changeCarStatusByUser(userId, carId, CarStatus.AVAILABLE);
-    }
-
-    @Override
-    public List<Car> filterCarsByCarStatus(CarStatus carStatus) {
-        System.out.println("FILTER_BY_STATUS cars");
-        return carsService.getAllCars().stream()
-                .filter(car -> car.getCarStatus().equals(carStatus))
+    public List<CarRentalOffice> findCarRentalOfficeByLocalDateTimeOfRent(LocalDateTime dateTime) throws CarRentalOfficeException{
+        return carsRentalOfficeRepository.findAll()
+                .stream()
+                .filter(car -> car.getLocalDateTimeOfRent().equals(dateTime))
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Car> filterCarsByBodyType(String bodyType) {
-        System.out.println("FILTER_BY_BODY_TYPE cars");
-        return carsService.getAllCars().stream()
-                .filter(car -> car.getBodyType().equals(bodyType))
-                .collect(Collectors.toList());
-
+    public boolean rentACar(String userId, String carId) throws Exception{
+        if(changeCarStatusInCarAndUser(userId, carId, CarStatus.RENTED)){
+            createCarRentalOffice(userId, carId);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public List<Car> filterCarsByDayPrice(BigDecimal from, BigDecimal to) {
-        System.out.println("FILTER_BY_PRICE cars");
-        return carsService.getAllCars().stream()
-                .filter(car -> isInRange(car.getDayPrice(), from, to))
-                .collect(Collectors.toList());
+    public boolean returnACar(String userId, String carId) throws Exception {
+        if(changeCarStatusInCarAndUser(userId, carId, CarStatus.AVAILABLE)){
+            updateCarRentalOffice(carId);
+            return true;
+        }else{
+            return false;
+        }
     }
 
-    @Override
-    public List<Car> filterCarsByYearOfProduction(int yearOfProduction) {
-        return Optional.of(yearOfProduction)
-                .map(m -> carsService.getAllCars().stream()
-                        .filter(car -> car.getYearOfProduction() == yearOfProduction))
-                .orElse(carsService.getAllCars().stream())
-                .collect(Collectors.toList());
-    }
 
-    @Override
-    public List<Car> filterCarsByMark(String mark) {
-        return Optional.of(mark)
-                .map (getAllCarsByMark (mark))
-                .orElse(carsService.getAllCars());
-    }
-
-    @Override
-    public User findUserByLogin(String login) throws UserException{
-        return Optional.of(login)
-                .map(this::getUserByLogin)
-                .orElseThrow(() -> new UserException("User not found!"));
-    }
-
-    private User getUserByLogin(String login) throws UserException {
-        return usersService.getAllUsers().stream()
-                .filter(user -> user.getUserLogin().equals(login))
-                .findFirst().orElseThrow(() -> new UserException("Not found User with given login"));
-    }
-
-    @Override
-    public User findUserByEmail(String email) throws UserException{
-        return Optional.of(email)
-                .map(this::getUserByEmail)
-                .orElseThrow(() -> new UserException("Not found User with given E-mail"));
-    }
-
-    private User getUserByEmail(String email) throws UserException {
-        return usersService.getAllUsers().stream()
-                .filter(user -> user.getUserEMail().equals(email))
-                .findFirst().orElseThrow(() -> new UserException("Not found User with given E-mail"));
-    }
-
-    private void changeCarStatusByUser(String userId, String carId, CarStatus carStatus) throws Exception{
+    private boolean changeCarStatusInCarAndUser(String userId, String carId, CarStatus carStatus) throws Exception{
         User user = getUserById(userId);
         if(haveUserCarRent(user)) {
             Car carToRent = getCarById(carId);
             if (checkCarStatusMatchVariable(carToRent)) {
                 updateCarStatus(carId, carToRent);
-                updateUserCarRentStatus(carId, carStatus, user);
+                updateUserCarStatus(carId, carStatus, user);
+                return true;
             }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
         }
     }
 
-    private void updateUserCarRentStatus(String carId, CarStatus carStatus, User user) throws Exception {
+    private void updateUserCarStatus(String carId, CarStatus carStatus, User user) throws Exception {
         if (carStatus.equals(CarStatus.AVAILABLE)) {
             user.setUserCarId(carId);
         } else {
@@ -184,13 +149,4 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         return user;
     }
 
-    private boolean isInRange(BigDecimal price, BigDecimal from, BigDecimal to) {
-        return price.compareTo(from)  > 0  && price.compareTo(to) < 0;
-    }
-
-    private Function<String, List<Car>> getAllCarsByMark(String mark) {
-        return m -> carsService.getAllCars().stream()
-                .filter(car -> car.getMark().equals(mark))
-                .collect(Collectors.toList());
-    }
 }

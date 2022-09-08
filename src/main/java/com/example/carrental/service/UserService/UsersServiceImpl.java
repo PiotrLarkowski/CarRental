@@ -39,7 +39,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public User updateUser(UserDto userDto, String id) throws Exception {
+    public void updateUser(UserDto userDto, String id) throws Exception {
         System.out.println("UPDATING client by ID");
         User userToUpdate = getUserById(id)
                 .map(user -> new User(user.getUserId(), userDto.getUserLogin(), userDto.getUserPassword(),
@@ -47,7 +47,6 @@ public class UsersServiceImpl implements UsersService {
                         null, userDto.getRole(), userDto.getStatus()))
                 .orElseThrow(() -> new UserException("No client with given id"));
         userRepository.save(userToUpdate);
-        return userToUpdate;
     }
 
     @Override
@@ -70,6 +69,31 @@ public class UsersServiceImpl implements UsersService {
         System.out.println("DELETING client by ID");
         getUserById(id).orElseThrow(() -> new UserException("No client with given ID"));
         userRepository.deleteById(id);
+    }
+    @Override
+    public User findUserByUserLogin(String login) throws UserException{
+        return Optional.of(login)
+                .map(this::getUserByLogin)
+                .orElseThrow(() -> new UserException("User not found!"));
+    }
+
+    private User getUserByLogin(String login) throws UserException {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getUserLogin().equals(login))
+                .findFirst().orElseThrow(() -> new UserException("Not found User with given login"));
+    }
+
+    @Override
+    public User findUserByUserEmail(String email) throws UserException{
+        return Optional.of(email)
+                .map(this::getUserByEmail)
+                .orElseThrow(() -> new UserException("Not found User with given E-mail"));
+    }
+
+    private User getUserByEmail(String email) throws UserException {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getUserEMail().equals(email))
+                .findFirst().orElseThrow(() -> new UserException("Not found User with given E-mail"));
     }
 
 }
