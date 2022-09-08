@@ -15,8 +15,6 @@ public interface UsersService {
 
     List<User> getAllUsers();
 
-    //TODO Zwraa ilosc wypozyczonych aut
-
     Optional<User> getUserById(String id);
 
     void deleteUserById(String id) throws Exception;

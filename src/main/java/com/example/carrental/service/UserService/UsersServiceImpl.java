@@ -21,11 +21,8 @@ public class UsersServiceImpl implements UsersService {
 
     private final UserRepository userRepository;
 
-    private final CarsService carsService;
-
-    public UsersServiceImpl(UserRepository userRepository, CarsService carsService) {
+    public UsersServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.carsService = carsService;
     }
 
     @Override
@@ -70,6 +67,7 @@ public class UsersServiceImpl implements UsersService {
         getUserById(id).orElseThrow(() -> new UserException("No client with given ID"));
         userRepository.deleteById(id);
     }
+
     @Override
     public User findUserByUserLogin(String login) throws UserException{
         return Optional.of(login)
@@ -77,17 +75,17 @@ public class UsersServiceImpl implements UsersService {
                 .orElseThrow(() -> new UserException("User not found!"));
     }
 
-    private User getUserByLogin(String login) throws UserException {
-        return userRepository.findAll().stream()
-                .filter(user -> user.getUserLogin().equals(login))
-                .findFirst().orElseThrow(() -> new UserException("Not found User with given login"));
-    }
-
     @Override
     public User findUserByUserEmail(String email) throws UserException{
         return Optional.of(email)
                 .map(this::getUserByEmail)
                 .orElseThrow(() -> new UserException("Not found User with given E-mail"));
+    }
+
+    private User getUserByLogin(String login) throws UserException {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getUserLogin().equals(login))
+                .findFirst().orElseThrow(() -> new UserException("Not found User with given login"));
     }
 
     private User getUserByEmail(String email) throws UserException {
