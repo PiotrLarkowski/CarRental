@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class CarsServiceImpl implements CarsService {
@@ -32,7 +34,7 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public Car updateCar(CarDto carDto, String id) throws Exception{
+    public void updateCar(CarDto carDto, String id) throws Exception{
         System.out.println("UPDATING car");
         Car carToUpdate = getCarById(id);
 
@@ -40,7 +42,6 @@ public class CarsServiceImpl implements CarsService {
                 carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice());
 
         carsRepository.save(car);
-        return car;
     }
 
     @Override
@@ -61,6 +62,55 @@ public class CarsServiceImpl implements CarsService {
 //            return carsRepository.findById(id);
 //        }
 //        return Optional.ofNullable(null);
+    }
+
+    @Override
+    public List<Car> filterCarsByCarStatus(CarStatus carStatus) {
+        System.out.println("FILTER_BY_STATUS cars");
+        return carsRepository.findAll().stream()
+                .filter(car -> car.getCarStatus().equals(carStatus))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Car> filterCarsByBodyType(String bodyType) {
+        System.out.println("FILTER_BY_BODY_TYPE cars");
+        return carsRepository.findAll().stream()
+                .filter(car -> car.getBodyType().equals(bodyType))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Car> filterCarsByYearOfProduction(int yearOfProduction) {
+        return carsRepository.findAll().stream()
+                .filter(car -> car.getYearOfProduction() == yearOfProduction)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Car> filterCarsByDayPrice(BigDecimal from, BigDecimal to) {
+        System.out.println("FILTER_BY_PRICE cars");
+        return carsRepository.findAll().stream()
+                .filter(car -> isInRange(car.getDayPrice(), from, to))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isInRange(BigDecimal price, BigDecimal from, BigDecimal to) {
+        return price.compareTo(from)  > 0  && price.compareTo(to) < 0;
+    }
+
+
+    @Override
+    public List<Car> filterCarsByMark(String mark) {
+        return Optional.of(mark)
+                .map (getAllCarsByMark (mark))
+                .orElse(carsRepository.findAll());
+    }
+
+    private Function<String, List<Car>> getAllCarsByMark(String mark) {
+        return m -> carsRepository.findAll().stream()
+                .filter(car -> car.getMark().equals(mark))
+                .collect(Collectors.toList());
     }
 
     @Override

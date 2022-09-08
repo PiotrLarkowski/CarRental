@@ -28,8 +28,8 @@ public class UserController {
     }
 
     @PutMapping(path = "/{id}")
-    public User updateUser(@RequestBody UserDto userDto, @PathVariable String id) throws Exception{
-        return usersService.updateUser(userDto, id);
+    public void updateUser(@RequestBody UserDto userDto, @PathVariable String id) throws Exception{
+        usersService.updateUser(userDto, id);
     }
 
     @GetMapping
@@ -51,13 +51,16 @@ public class UserController {
         usersService.deleteUserById(id);
     }
 
-    @PutMapping(path = "/rentCar/{id}")
-    public void userRentCar(@RequestParam String userId, @RequestParam String carId) throws Exception{
-        usersService.rentCar(userId, carId);
+    @GetMapping(path="/userEmail/{email}")
+    @ResponseStatus(HttpStatus.FOUND)
+    public User findUserByEmail(@PathVariable String email){
+        return usersService.findUserByUserEmail(email);
     }
 
-    @PutMapping(path ="/returnCar/{id}")
-    public void userReturnCar(@RequestParam String userId, @RequestParam String carId) throws Exception{
-        usersService.returnCar(userId,carId);
+    @GetMapping(path="/userLogin/{login}")
+    @ResponseStatus(HttpStatus.FOUND)
+    public User findUserByLogin(@PathVariable String login){
+        return usersService.findUserByUserLogin(login);
     }
+
 }

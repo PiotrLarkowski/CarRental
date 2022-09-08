@@ -13,12 +13,21 @@ public interface CarsService {
 
     Car createCar(CarDto carDto);
 
-    Car updateCar(CarDto carDto, String id) throws Exception;
+    void updateCar(CarDto carDto, String id) throws Exception;
 
     List<Car> getAllCars();
 
     Car getCarById(String id) throws CarException;
 
     void deleteCarById(String id) throws CarException;
+    List<Car> filterCarsByMark(String mark);
+
+    List<Car> filterCarsByDayPrice(BigDecimal from, BigDecimal to);
+
+    List<Car> filterCarsByYearOfProduction(int yearOfProduction);
+
+    List<Car> filterCarsByBodyType(String bodyType);
+
+    List<Car> filterCarsByCarStatus(CarStatus carStatus);
 
 }

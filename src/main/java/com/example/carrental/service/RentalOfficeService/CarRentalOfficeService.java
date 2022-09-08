@@ -3,6 +3,7 @@ package com.example.carrental.service.RentalOfficeService;
 import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domain.RentalOffice.CarRentalOffice;
+import com.example.carrental.domain.RentalOffice.CarRentalOfficeException;
 import com.example.carrental.domain.User.User;
 
 import java.math.BigDecimal;
@@ -16,28 +17,11 @@ public interface CarRentalOfficeService {
 
     List<CarRentalOffice> getAllCarRentalOffices();
 
-    CarRentalOffice getCarRentalOfficeByDateTime (LocalDateTime dateTime);
+    List<CarRentalOffice> findCarRentalOfficeByLocalDateTimeOfRent(LocalDateTime dateTime) throws CarRentalOfficeException;
 
-    void rentACar(String userId, String carId) throws Exception;
+    boolean rentACar(String userId, String carId) throws Exception;
 
-    void returnACar(String userId, String carId) throws Exception;
-
-    List<Car> filterCarsByCarStatus(CarStatus carStatus);
-
-    List<Car> filterCarsByBodyType(String bodyType);
-
-    List<Car> filterCarsByDayPrice(BigDecimal from, BigDecimal to);
-
-    List<Car> filterCarsByYearOfProduction(int yearOfProduction);
-
-    List<Car> filterCarsByMark(String mark);
-
-    User findUserByLogin(String login) throws Exception;
-
-    User findUserByEmail(String email);
-
-
-
+    boolean returnACar(String userId, String carId) throws Exception;
 
 
 }
