@@ -1,13 +1,10 @@
-package com.example.carrental.controller.RentalCarService;
+package com.example.carrental.controller.CarRentalOffice;
 
 import com.example.carrental.repository.CarsRentalOfficeRepository;
 import com.example.carrental.service.CarService.CarsService;
 import com.example.carrental.service.RentalOfficeService.CarRentalOfficeService;
 import com.example.carrental.service.UserService.UsersService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping(path="/carRentalOffice")
@@ -26,12 +23,12 @@ public class CarRentalOfficeContoller {
     }
 
     @PutMapping(path = "/rentCar")
-    public void userRentCar(@RequestParam String userId, @RequestParam String carId) throws Exception{
+    public void userRentCar(@RequestParam Long userId, @RequestParam Long carId) throws Exception{
         carRentalOfficeService.rentACar(userId, carId);
     }
 
     @PutMapping(path ="/returnCar")
-    public void userReturnCar(@RequestParam String userId, @RequestParam String carId) throws Exception{
+    public void userReturnCar(@RequestParam Long userId, @RequestParam Long carId) throws Exception{
         carRentalOfficeService.returnACar(userId,carId);
     }
 }

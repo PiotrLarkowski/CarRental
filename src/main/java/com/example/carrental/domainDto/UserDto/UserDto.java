@@ -1,6 +1,10 @@
 package com.example.carrental.domainDto.UserDto;
 
+import com.example.carrental.domain.RentalOffice.CarRentalOffice;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,15 +23,15 @@ public class UserDto {
 
     private String userLastName;
 
-    //TODO wiek klienta
-
     private String userEMail;
 
     private String userAddress;
 
-    private String userCarId;
+    private Long userCarId;
 
     private String role;
 
     private String status;
+
+    private List<CarRentalOffice> rentalOfficeList;
 }

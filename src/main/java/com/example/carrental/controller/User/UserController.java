@@ -1,6 +1,5 @@
 package com.example.carrental.controller.User;
 
-import com.example.carrental.controller.OwnExceptionHandler;
 import com.example.carrental.domain.User.User;
 import com.example.carrental.domainDto.UserDto.UserDto;
 import com.example.carrental.service.UserService.UsersService;
@@ -28,7 +27,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/{id}")
-    public void updateUser(@RequestBody UserDto userDto, @PathVariable String id) throws Exception{
+    public void updateUser(@RequestBody UserDto userDto, @PathVariable Long id) throws Exception{
         usersService.updateUser(userDto, id);
     }
 
@@ -39,15 +38,12 @@ public class UserController {
     }
 
     @GetMapping(path = "{id}")
-    public ResponseEntity<?> getUserById(@PathVariable String id){
-        if(id.isEmpty()){
-            return new OwnExceptionHandler().getResponseHttpNotFound();
-        }
-        return new ResponseEntity<>(usersService.getUserById(id).get(),HttpStatus.OK);
+    public ResponseEntity<?> getUserById(@PathVariable Long id){
+        return new ResponseEntity<>(usersService.getUserById(id),HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
-    public void deleteUserById(@PathVariable String id) throws Exception{
+    public void deleteUserById(@PathVariable Long id) throws Exception{
         usersService.deleteUserById(id);
     }
 

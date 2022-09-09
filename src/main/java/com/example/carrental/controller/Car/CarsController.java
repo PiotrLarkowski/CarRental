@@ -8,6 +8,7 @@ import com.example.carrental.domainDto.CarDto.CarDto;
 import com.example.carrental.service.CarService.CarsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,7 +35,7 @@ public class CarsController {
     }
 
     @PutMapping(path = "/{id}")
-    public void updateCar(@RequestBody CarDto carDto, @PathVariable String id) throws Exception {
+    public void updateCar(@RequestBody CarDto carDto, @PathVariable Long id) throws Exception {
         carsService.updateCar(carDto, id);
     }
 
@@ -54,19 +55,19 @@ public class CarsController {
         return carsService.filterCarsByBodyType(bodyType);
     }
 
-    @GetMapping(path = "/filterByPrice/{price}")
+    @GetMapping(path = "/filterByPrice/")
     public Collection<Car> filterCarsByPrice(@RequestParam BigDecimal from, @RequestParam BigDecimal to) {
         return carsService.filterCarsByDayPrice(from, to);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Car> getCarById(@PathVariable String id) throws CarException {
+    public ResponseEntity<Car> getCarById(@PathVariable Long id) throws CarException {
         return new ResponseEntity<>(carsService.getCarById(id), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteCar(@PathVariable String id) throws CarException {
+    public void deleteCar(@PathVariable Long id) throws CarException {
         carsService.deleteCarById(id);
     }
 

@@ -1,9 +1,11 @@
 package com.example.carrental.domainDto.CarDto;
 
 import com.example.carrental.domain.Car.CarStatus;
+import com.example.carrental.domain.RentalOffice.CarRentalOffice;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,5 +24,5 @@ public class CarDto {
     private int run;
     private CarStatus carStatus;
     private BigDecimal dayPrice;
-
+    private List<CarRentalOffice> rentalOfficeList;
 }
