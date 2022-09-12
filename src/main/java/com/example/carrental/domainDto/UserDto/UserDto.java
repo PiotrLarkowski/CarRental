@@ -34,4 +34,9 @@ public class UserDto {
     private String status;
 
     private List<CarRentalOffice> rentalOfficeList;
+
+    public UserDto(String userLogin, String userPassword) {
+        this.userLogin = userLogin;
+        this.userPassword = userPassword;
+    }
 }
