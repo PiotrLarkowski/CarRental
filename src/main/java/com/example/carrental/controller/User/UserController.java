@@ -3,6 +3,7 @@ package com.example.carrental.controller.User;
 import com.example.carrental.domain.User.User;
 import com.example.carrental.domainDto.UserDto.UserDto;
 import com.example.carrental.service.UserService.UsersService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody @Valid UserDto userDto){
         return usersService.createUser(userDto);
+    }
+
+    @PostMapping(path = "/log/in")
+    @ResponseStatus(HttpStatus.OK)
+    public User sendUser(@RequestBody @Valid @NotNull UserDto userDto){
+        return usersService.findUserByUserLogin(userDto.getUserLogin());
     }
 
     @PutMapping(path = "/{id}")
