@@ -3,6 +3,7 @@ package com.example.carrental.service.RentalOfficeService;
 import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarException;
 import com.example.carrental.domain.Car.CarStatus;
+import com.example.carrental.domain.Income.Income;
 import com.example.carrental.domain.RentalOffice.CarRentalOffice;
 import com.example.carrental.domain.RentalOffice.CarRentalOfficeException;
 import com.example.carrental.domain.User.User;
@@ -12,7 +13,9 @@ import com.example.carrental.domainDto.RentalOffice.CarRentalOfficeDto;
 import com.example.carrental.domainDto.RentalOffice.CarRentalOfficeList;
 import com.example.carrental.domainDto.UserDto.UserDto;
 import com.example.carrental.repository.CarsRentalOfficeRepository;
+import com.example.carrental.repository.IncomeRepository;
 import com.example.carrental.service.CarService.CarsService;
+import com.example.carrental.service.IncomeService.IncomesService;
 import com.example.carrental.service.UserService.UsersService;
 import org.springframework.stereotype.Service;
 
@@ -30,10 +33,16 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
 
     private final UsersService usersService;
 
-    public CarsRentalOfficeImpl(CarsRentalOfficeRepository carsRentalOfficeRepository, CarsService carsService, UsersService usersService) {
+    private final IncomesService incomeService;
+
+    private final IncomeRepository incomeRepository;
+
+    public CarsRentalOfficeImpl(CarsRentalOfficeRepository carsRentalOfficeRepository, CarsService carsService, UsersService usersService, IncomesService incomeService, IncomeRepository incomeRepository) {
         this.carsRentalOfficeRepository = carsRentalOfficeRepository;
         this.carsService = carsService;
         this.usersService = usersService;
+        this.incomeService = incomeService;
+        this.incomeRepository = incomeRepository;
     }
 
     @Override
@@ -71,6 +80,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
     public boolean rentACar(Long userId, Long carId) throws Exception{
         if(changeCarStatusInCarAndUser(userId, carId, CarStatus.RENTED)){
             createCarRentalOffice(userId, carId);
+
             return true;
         }
         return false;
@@ -111,7 +121,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
             user.setUserCarId(null);
         }
         usersService.updateUser(new UserDto(user.getUserLogin(), user.getUserPassword(), user.getUserName()
-                , user.getUserLastName(), user.getUserEMail(), user.getUserAddress(), user.getUserCarId(), user.getRole(), user.getStatus(), user.getRentalOfficeList()), user.getId());
+                , user.getUserLastName(), user.getUserEMail(), user.getUserAddress(), user.getUserCarId(), user.getRole(), user.getStatus()), user.getId());
     }
 
     private CarRentalOffice createCarRentalOffice(Long userId, Long carId) throws CarException {
@@ -122,6 +132,10 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
                 .getLocalDateTimeOfReturn(null)
                 .build();
         carsRentalOfficeRepository.save(newCarRentalOffice);
+
+        Income income = incomeService.createIncome(carsService.getCarById(carId).getDayPrice());
+        incomeRepository.save(income);
+
         return newCarRentalOffice;
     }
 
@@ -137,7 +151,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
     private void updateCarStatus(Car carToRent, CarStatus carStatus) throws Exception {
         carsService.updateCar(new CarDto(carToRent.getMark(), carToRent.getModel(), carToRent.getBodyType(),
                 carToRent.getYearOfProduction(), carToRent.getColour(), carToRent.getRun(),
-                carStatus, carToRent.getDayPrice(), carToRent.getRentalOfficeList()), carToRent.getId());
+                carStatus, carToRent.getDayPrice()), carToRent.getId());
     }
 
     private boolean checkCarStatusMatchVariable(Car carToRent) {

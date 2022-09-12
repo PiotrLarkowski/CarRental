@@ -1,6 +1,7 @@
 package com.example.carrental.controller;
 
 import com.example.carrental.domain.Car.CarException;
+import com.example.carrental.domain.Income.IncomeException;
 import com.example.carrental.domain.RentalOffice.CarRentalOfficeException;
 import com.example.carrental.domain.User.UserException;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +27,12 @@ public class OwnExceptionHandler {
         return ResponseEntity.notFound().build();
     }
     @ExceptionHandler({CarRentalOfficeException.class})
-    public ResponseEntity<?> getResponseHttpRentalNotFound(){ return ResponseEntity.notFound().build();}
+    public ResponseEntity<?> getResponseHttpRentalNotFound(){
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler({IncomeException.class})
+    public ResponseEntity<?> getResponseHttpIncomeNotFound(){
+        return ResponseEntity.notFound().build();
+    }
 }

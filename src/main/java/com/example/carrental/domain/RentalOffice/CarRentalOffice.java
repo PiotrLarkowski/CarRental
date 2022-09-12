@@ -22,9 +22,11 @@ public class CarRentalOffice {
     private long id;
 
     @ManyToOne
+    @JoinColumn(name = "userId")
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "carId")
     private Car car;
 
     private LocalDateTime localDateTimeOfRent;

@@ -24,5 +24,5 @@ public class CarDto {
     private int run;
     private CarStatus carStatus;
     private BigDecimal dayPrice;
-    private List<CarRentalOffice> rentalOfficeList;
+
 }

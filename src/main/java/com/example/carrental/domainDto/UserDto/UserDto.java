@@ -16,24 +16,14 @@ import java.util.List;
 public class UserDto {
 
     private String userLogin;
-
     private String userPassword;
-
     private String userName;
-
     private String userLastName;
-
     private String userEMail;
-
     private String userAddress;
-
     private Long userCarId;
-
     private String role;
-
     private String status;
-
-    private List<CarRentalOffice> rentalOfficeList;
 
     public UserDto(String userLogin, String userPassword) {
         this.userLogin = userLogin;

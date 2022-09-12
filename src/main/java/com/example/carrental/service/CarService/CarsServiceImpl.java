@@ -27,8 +27,8 @@ public class CarsServiceImpl implements CarsService {
 
     @Override
     public Car createCar(CarDto carDto) {
-        Car car = new Car(0L, carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
-                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice(), new ArrayList<>());
+        Car car = new Car(null, carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
+                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice());
         carsRepository.save(car);
         return car;
     }
@@ -37,7 +37,7 @@ public class CarsServiceImpl implements CarsService {
     public void updateCar(CarDto carDto, Long id) throws Exception{
         Car carToUpdate = getCarById(id);
         Car car = new Car(carToUpdate.getId(), carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
-                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice(), new ArrayList<>());
+                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice());
         carsRepository.save(car);
     }
 
@@ -100,8 +100,8 @@ public class CarsServiceImpl implements CarsService {
 
     @Override
     public void deleteCarById(Long id) throws CarException {
-        validCarId(id);
-        carsRepository.deleteById(id);
+        Car carById = validCarId(id);
+        carsRepository.delete(carById);
     }
 
     private boolean isInRange(BigDecimal price, BigDecimal from, BigDecimal to) {

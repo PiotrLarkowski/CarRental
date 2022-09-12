@@ -42,7 +42,7 @@ public class UsersServiceImpl implements UsersService {
 
         userRepository.save(new User(userToUpdate.getId(), userDto.getUserLogin(), userDto.getUserPassword(),
                 userDto.getUserName(), userDto.getUserLastName(), userDto.getUserEMail(), userDto.getUserAddress(),
-                userDto.getUserCarId(), userDto.getRole(), userDto.getStatus(),userDto.getRentalOfficeList()));
+                userDto.getUserCarId(), userDto.getRole(), userDto.getStatus()));
     }
 
     @Override
@@ -59,8 +59,8 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public void deleteUserById(Long id) {
-        getUserById(id);
-        userRepository.deleteUserById(id);
+        User userById = getUserById(id);
+        userRepository.delete(userById);
     }
 
     @Override

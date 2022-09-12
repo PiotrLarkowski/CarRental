@@ -40,7 +40,4 @@ public class User {
     private String role;
 
     private String status;
-
-    @OneToMany(mappedBy = "user")
-    private List<CarRentalOffice> rentalOfficeList;
 }

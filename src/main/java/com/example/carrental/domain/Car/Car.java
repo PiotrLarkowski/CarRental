@@ -39,7 +39,4 @@ public class Car {
 
     private BigDecimal dayPrice;
 
-    @OneToMany(mappedBy = "car")
-    private List<CarRentalOffice> rentalOfficeList;
-
 }
