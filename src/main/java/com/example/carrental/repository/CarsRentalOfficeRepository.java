@@ -12,4 +12,6 @@ import java.util.Collection;
 import java.util.List;
 
 public interface CarsRentalOfficeRepository extends JpaRepository<CarRentalOffice, String> {
+
+    CarRentalOffice findById(Long id);
 }

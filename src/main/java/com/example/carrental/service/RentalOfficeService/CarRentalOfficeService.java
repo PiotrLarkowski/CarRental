@@ -19,9 +19,9 @@ public interface CarRentalOfficeService {
 
     List<CarRentalOffice> findCarRentalOfficeByLocalDateTimeOfRent(LocalDateTime dateTime) throws CarRentalOfficeException;
 
-    boolean rentACar(String userId, String carId) throws Exception;
+    boolean rentACar(Long userId, Long carId) throws Exception;
 
-    boolean returnACar(String userId, String carId) throws Exception;
+    boolean returnACar(Long userId, Long carId) throws Exception;
 
 
 }

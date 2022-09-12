@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,7 +53,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
                 .collect(Collectors.toList());
     }
     @Override
-    public boolean rentACar(String userId, String carId) throws Exception{
+    public boolean rentACar(Long userId, Long carId) throws Exception{
         if(changeCarStatusInCarAndUser(userId, carId, CarStatus.RENTED)){
             createCarRentalOffice(userId, carId);
             return true;
@@ -63,7 +62,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
     }
 
     @Override
-    public boolean returnACar(String userId, String carId) throws Exception {
+    public boolean returnACar(Long userId, Long carId) throws Exception {
         if(changeCarStatusInCarAndUser(userId, carId, CarStatus.AVAILABLE)){
             updateCarRentalOffice(carId);
             return true;
@@ -72,8 +71,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         }
     }
 
-
-    private boolean changeCarStatusInCarAndUser(String userId, String carId, CarStatus carStatus) throws Exception{
+    private boolean changeCarStatusInCarAndUser(Long userId, Long carId, CarStatus carStatus) throws Exception{
         User user = getUserById(userId);
         if(haveUserCarRent(user)) {
             Car carToRent = getCarById(carId);
@@ -91,37 +89,40 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         }
     }
 
-    private void updateUserCarStatus(String carId, CarStatus carStatus, User user) throws Exception {
+    private void updateUserCarStatus(Long carId, CarStatus carStatus, User user) throws Exception {
         if (carStatus.equals(CarStatus.AVAILABLE)) {
             user.setUserCarId(carId);
         } else {
-            user.setUserCarId("");
+            user.setUserCarId(null);
         }
         usersService.updateUser(new UserDto(user.getUserLogin(), user.getUserPassword(), user.getUserName()
-                , user.getUserLastName(), user.getUserEMail(), user.getUserAddress(), user.getUserCarId(), user.getRole(), user.getStatus()), user.getUserId());
+                , user.getUserLastName(), user.getUserEMail(), user.getUserAddress(), user.getUserCarId(), user.getRole(), user.getStatus(), user.getRentalOfficeList()), user.getId());
     }
 
-    private CarRentalOffice createCarRentalOffice(String userId, String carId) {
-        System.out.println("Creating a rent");
-        CarRentalOffice rent = new CarRentalOffice(UUID.randomUUID().toString(), userId, carId, LocalDateTime.now(), null);
-        carsRentalOfficeRepository.save(rent);
-        return rent;
+    private CarRentalOffice createCarRentalOffice(Long userId, Long carId) throws CarException {
+        CarRentalOffice newCarRentalOffice = CarRentalOffice.builder()
+                .user(usersService.getUserById(userId))
+                .car(carsService.getCarById(carId))
+                .localDateTimeOfRent(LocalDateTime.now())
+                .getLocalDateTimeOfReturn(null)
+                .build();
+        carsRentalOfficeRepository.save(newCarRentalOffice);
+        return newCarRentalOffice;
     }
 
-    private void updateCarRentalOffice(String carRentalOfficeId){
-        System.out.println("Updating car rental office");
-        CarRentalOffice rentalOfficeToUpdate = carsRentalOfficeRepository.findById(carRentalOfficeId)
+    private void updateCarRentalOffice(Long carRentalOfficeId){
+        CarRentalOffice rentalOfficeToUpdate = Optional.of(carsRentalOfficeRepository.findById(carRentalOfficeId))
                 .orElseThrow(() -> new CarRentalOfficeException("Couldn't find rent"));
-        CarRentalOffice updatedCarRentalOffice = new CarRentalOffice(carRentalOfficeId, rentalOfficeToUpdate.getCarId(),
-                rentalOfficeToUpdate.getUserId(),rentalOfficeToUpdate.getLocalDateTimeOfRent(),
-                rentalOfficeToUpdate.getGetLocalDateTimeOfRetun());
+        CarRentalOffice updatedCarRentalOffice = new CarRentalOffice(carRentalOfficeId, rentalOfficeToUpdate.getUser(),
+                rentalOfficeToUpdate.getCar(),rentalOfficeToUpdate.getLocalDateTimeOfRent(),
+                rentalOfficeToUpdate.getGetLocalDateTimeOfReturn());
         carsRentalOfficeRepository.save(updatedCarRentalOffice);
     }
 
-    private void updateCarStatus(String carId, Car carToRent) throws Exception {
+    private void updateCarStatus(Long carId, Car carToRent) throws Exception {
         carsService.updateCar(new CarDto(carToRent.getMark(), carToRent.getModel(), carToRent.getBodyType(),
                 carToRent.getYearOfProduction(), carToRent.getColour(), carToRent.getRun(),
-                carToRent.getCarStatus(), carToRent.getDayPrice()), carId);
+                carToRent.getCarStatus(), carToRent.getDayPrice(), carToRent.getRentalOfficeList()), carId);
     }
 
     private boolean checkCarStatusMatchVariable(Car carToRent) {
@@ -132,7 +133,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         return false;
     }
 
-    private Car getCarById(String carId) throws CarException {
+    private Car getCarById(Long carId) throws CarException {
         Car carToRent = Optional.of(carsService.getCarById(carId)).orElseThrow(() -> new CarException("No car with given id"));
         return carToRent;
     }
@@ -145,9 +146,8 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         return true;
     }
 
-    private User getUserById(String userId) {
-        User user = usersService.getUserById(userId).orElseThrow(() -> new UserException("No client with given ID"));
-        return user;
+    private User getUserById(Long userId) {
+        return Optional.of(usersService.getUserById(userId)).orElseThrow(() -> new UserException("No client with given ID"));
     }
 
 }

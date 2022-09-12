@@ -5,19 +5,18 @@ import com.example.carrental.domain.User.UserException;
 import com.example.carrental.domainDto.UserDto.UserDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UsersService {
 
     User createUser(UserDto userDto);
 
-    void updateUser(UserDto userDto, String id) throws Exception;
+    void updateUser(UserDto userDto, Long id) throws Exception;
 
     List<User> getAllUsers();
 
-    Optional<User> getUserById(String id);
+    User getUserById(Long id);
 
-    void deleteUserById(String id) throws Exception;
+    void deleteUserById(Long id) throws Exception;
 
     User findUserByUserEmail(String email) throws UserException;
 

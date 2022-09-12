@@ -6,16 +6,16 @@ import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domainDto.CarDto.CarDto;
 import com.example.carrental.repository.CarsRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class CarsServiceImpl implements CarsService {
 
     private final CarsRepository carsRepository;
@@ -26,17 +26,17 @@ public class CarsServiceImpl implements CarsService {
 
     @Override
     public Car createCar(CarDto carDto) {
-        Car car = new Car(UUID.randomUUID().toString(), carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
-                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice());
+        Car car = new Car(0L, carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
+                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice(), new ArrayList<>());
         carsRepository.save(car);
         return car;
     }
 
     @Override
-    public void updateCar(CarDto carDto, String id) throws Exception{
+    public void updateCar(CarDto carDto, Long id) throws Exception{
         Car carToUpdate = getCarById(id);
         Car car = new Car(carToUpdate.getId(), carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
-                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice());
+                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice(), new ArrayList<>());
         carsRepository.save(car);
     }
 
@@ -46,7 +46,7 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public Car getCarById(String id) throws CarException {
+    public Car getCarById(Long id) throws CarException {
         return validCarId(id);
     }
 
@@ -86,18 +86,17 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public void deleteCarById(String id) throws CarException {
-        Car car = validCarId(id);
-        System.out.println("DELETE car");
-        carsRepository.deleteById(car.getId());
+    public void deleteCarById(Long id) throws CarException {
+        validCarId(id);
+        carsRepository.deleteById(id);
     }
 
     private boolean isInRange(BigDecimal price, BigDecimal from, BigDecimal to) {
         return price.compareTo(from)  > 0  && price.compareTo(to) < 0;
     }
 
-    private Car validCarId(String id) throws CarException {
-       return carsRepository.findById(id).orElseThrow(() -> new CarException("Couldn't find specific id"));
+    private Car validCarId(Long id) throws CarException {
+       return Optional.of(carsRepository.findCarById(id)).orElseThrow(() -> new CarException("Couldn't find specific id"));
     }
 
 }

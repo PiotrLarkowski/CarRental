@@ -1,11 +1,11 @@
 package com.example.carrental.domain.Car;
 
+import com.example.carrental.domain.RentalOffice.CarRentalOffice;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Entity
@@ -16,10 +16,12 @@ import java.math.BigDecimal;
 @EqualsAndHashCode
 @ToString
 @Builder
+@Table(name="CarRentalCar")
 public class Car {
     @Id
     @Column(nullable = false)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String mark;
 
@@ -37,5 +39,7 @@ public class Car {
 
     private BigDecimal dayPrice;
 
+    @OneToMany(mappedBy = "car")
+    private List<CarRentalOffice> rentalOfficeList;
 
 }

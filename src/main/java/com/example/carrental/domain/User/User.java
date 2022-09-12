@@ -1,11 +1,10 @@
 package com.example.carrental.domain.User;
 
+import com.example.carrental.domain.RentalOffice.CarRentalOffice;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -13,11 +12,14 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Builder
 @Table(name="CarRentalUser")
 public class User {
 
     @Id
-    private String userId;
+    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(unique = true)
     private String userLogin;
@@ -33,9 +35,12 @@ public class User {
 
     private String userAddress;
 
-    private String userCarId;
+    private Long userCarId;
 
     private String role;
 
     private String status;
+
+    @OneToMany(mappedBy = "user")
+    private List<CarRentalOffice> rentalOfficeList;
 }
