@@ -5,6 +5,8 @@ import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domain.RentalOffice.CarRentalOffice;
 import com.example.carrental.domain.RentalOffice.CarRentalOfficeException;
 import com.example.carrental.domain.User.User;
+import com.example.carrental.domainDto.RentalOffice.CarRentalOfficeDto;
+import com.example.carrental.domainDto.RentalOffice.CarRentalOfficeList;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,11 +15,13 @@ import java.util.List;
 
 public interface CarRentalOfficeService {
 
-    CarRentalOffice getCarRentalOfficeById(String id);
+    CarRentalOffice getCarRentalOfficeById(Long id);
 
-    List<CarRentalOffice> getAllCarRentalOffices();
+    List<CarRentalOfficeList> getAllCarRentalOffices();
 
     List<CarRentalOffice> findCarRentalOfficeByLocalDateTimeOfRent(LocalDateTime dateTime) throws CarRentalOfficeException;
+
+    List<CarRentalOfficeList> findAllDto();
 
     boolean rentACar(Long userId, Long carId) throws Exception;
 

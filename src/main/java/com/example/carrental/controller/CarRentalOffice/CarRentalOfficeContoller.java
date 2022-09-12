@@ -1,34 +1,50 @@
 package com.example.carrental.controller.CarRentalOffice;
 
-import com.example.carrental.repository.CarsRentalOfficeRepository;
-import com.example.carrental.service.CarService.CarsService;
+import com.example.carrental.domain.RentalOffice.CarRentalOffice;
+import com.example.carrental.domainDto.RentalOffice.CarRentalOfficeList;
 import com.example.carrental.service.RentalOfficeService.CarRentalOfficeService;
-import com.example.carrental.service.UserService.UsersService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping(path="/carRentalOffice")
 public class CarRentalOfficeContoller {
 
-    private final UsersService usersService;
-
-    private final CarsService carsService;
-
     private final CarRentalOfficeService carRentalOfficeService;
 
-    public CarRentalOfficeContoller(UsersService usersService, CarsService carsService, CarsRentalOfficeRepository carsRentalOfficeRepository, CarRentalOfficeService carRentalOfficeService) {
-        this.usersService = usersService;
-        this.carsService = carsService;
+    public CarRentalOfficeContoller(CarRentalOfficeService carRentalOfficeService) {
         this.carRentalOfficeService = carRentalOfficeService;
     }
 
-    @PutMapping(path = "/rentCar")
-    public void userRentCar(@RequestParam Long userId, @RequestParam Long carId) throws Exception{
-        carRentalOfficeService.rentACar(userId, carId);
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<CarRentalOfficeList> getAllCarRentalOffice(){
+        return carRentalOfficeService.getAllCarRentalOffices();
+    }
+
+    @GetMapping(path="/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CarRentalOffice getCarRentalOfficeById(@PathVariable @Valid Long id){
+        return carRentalOfficeService.getCarRentalOfficeById(id);
+    }
+
+    @GetMapping(path = "/dateTime/{localDateTime}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CarRentalOffice> getCarRentalOfficeByDateTime(@PathVariable LocalDateTime localDateTime){
+        return carRentalOfficeService.findCarRentalOfficeByLocalDateTimeOfRent(localDateTime);
     }
 
     @PutMapping(path ="/returnCar")
     public void userReturnCar(@RequestParam Long userId, @RequestParam Long carId) throws Exception{
         carRentalOfficeService.returnACar(userId,carId);
+    }
+
+    @PutMapping(path = "/rentCar")
+    public void userRentCar(@RequestParam Long userId, @RequestParam Long carId) throws Exception{
+        carRentalOfficeService.rentACar(userId, carId);
     }
 }

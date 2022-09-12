@@ -5,6 +5,7 @@ import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarException;
 import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domainDto.CarDto.CarDto;
+import com.example.carrental.domainDto.CarDto.CarDtoNoList;
 import com.example.carrental.service.CarService.CarsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class CarsController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.FOUND)
-    public Collection<Car> getAllCars() {
+    public Collection<CarDtoNoList> getAllCars() {
         return carsService.getAllCars();
     }
 

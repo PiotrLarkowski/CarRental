@@ -8,6 +8,8 @@ import com.example.carrental.domain.RentalOffice.CarRentalOfficeException;
 import com.example.carrental.domain.User.User;
 import com.example.carrental.domain.User.UserException;
 import com.example.carrental.domainDto.CarDto.CarDto;
+import com.example.carrental.domainDto.RentalOffice.CarRentalOfficeDto;
+import com.example.carrental.domainDto.RentalOffice.CarRentalOfficeList;
 import com.example.carrental.domainDto.UserDto.UserDto;
 import com.example.carrental.repository.CarsRentalOfficeRepository;
 import com.example.carrental.service.CarService.CarsService;
@@ -35,14 +37,26 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
     }
 
     @Override
-    public CarRentalOffice getCarRentalOfficeById(String id) throws CarRentalOfficeException{
-        return carsRentalOfficeRepository.findById(id)
+    public CarRentalOffice getCarRentalOfficeById(Long id) throws CarRentalOfficeException{
+        return Optional.of(carsRentalOfficeRepository.findById(id))
                 .orElseThrow(()-> new CarRentalOfficeException("Rental not found"));
     }
 
     @Override
-    public List<CarRentalOffice> getAllCarRentalOffices() {
-        return carsRentalOfficeRepository.findAll();
+    public List<CarRentalOfficeList> getAllCarRentalOffices() {
+        return findAllDto();
+    }
+
+    @Override
+    public List<CarRentalOfficeList> findAllDto(){
+        return carsRentalOfficeRepository.findAll().stream()
+                .map(carRentalOffice -> CarRentalOfficeList.builder()
+                        .userName(carRentalOffice.getUser().getUserName())
+                        .carId(carRentalOffice.getCar().getId())
+                        .localDateTimeOfRent(carRentalOffice.getLocalDateTimeOfRent())
+                        .getLocalDateTimeOfReturn(carRentalOffice.getGetLocalDateTimeOfReturn())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -52,6 +66,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
                 .filter(car -> car.getLocalDateTimeOfRent().equals(dateTime))
                 .collect(Collectors.toList());
     }
+
     @Override
     public boolean rentACar(Long userId, Long carId) throws Exception{
         if(changeCarStatusInCarAndUser(userId, carId, CarStatus.RENTED)){
@@ -76,7 +91,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         if(haveUserCarRent(user)) {
             Car carToRent = getCarById(carId);
             if (checkCarStatusMatchVariable(carToRent)) {
-                updateCarStatus(carId, carToRent);
+                updateCarStatus(carToRent, carStatus);
                 updateUserCarStatus(carId, carStatus, user);
                 return true;
             }
@@ -119,15 +134,18 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         carsRentalOfficeRepository.save(updatedCarRentalOffice);
     }
 
-    private void updateCarStatus(Long carId, Car carToRent) throws Exception {
+    private void updateCarStatus(Car carToRent, CarStatus carStatus) throws Exception {
         carsService.updateCar(new CarDto(carToRent.getMark(), carToRent.getModel(), carToRent.getBodyType(),
                 carToRent.getYearOfProduction(), carToRent.getColour(), carToRent.getRun(),
-                carToRent.getCarStatus(), carToRent.getDayPrice(), carToRent.getRentalOfficeList()), carId);
+                carStatus, carToRent.getDayPrice(), carToRent.getRentalOfficeList()), carToRent.getId());
     }
 
     private boolean checkCarStatusMatchVariable(Car carToRent) {
         if(carToRent.getCarStatus() == CarStatus.AVAILABLE){
-            carToRent.setCarStatus(CarStatus.RENTED);
+//            carToRent.setCarStatus(CarStatus.RENTED);
+            return true;
+        } else if(carToRent.getCarStatus() == CarStatus.RENTED){
+//            carToRent.setCarStatus(CarStatus.AVAILABLE);
             return true;
         }
         return false;

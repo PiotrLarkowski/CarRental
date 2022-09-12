@@ -4,6 +4,7 @@ import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarException;
 import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domainDto.CarDto.CarDto;
+import com.example.carrental.domainDto.CarDto.CarDtoNoList;
 import com.example.carrental.repository.CarsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,8 +42,20 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public List<Car> getAllCars() {
-        return carsRepository.findAll();
+    public List<CarDtoNoList> getAllCars() {
+        return carsRepository.findAll().stream()
+                .map(car -> CarDtoNoList.builder()
+                        .id(car.getId())
+                        .mark(car.getMark())
+                        .model(car.getModel())
+                        .bodyType(car.getBodyType())
+                        .yearOfProduction(car.getYearOfProduction())
+                        .colour(car.getColour())
+                        .run(car.getRun())
+                        .carStatus(car.getCarStatus())
+                        .dayPrice(car.getDayPrice())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override

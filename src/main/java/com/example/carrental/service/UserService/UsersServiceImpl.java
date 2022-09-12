@@ -52,14 +52,15 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public User getUserById(Long id)   {
-        Long userFindById = Optional.of(id).orElseThrow(() -> new UserException("No Client found in DB"));
-        return userRepository.findById(userFindById);
+        Long userLongId = Optional.of(id)
+                .orElseThrow(() -> new UserException("No Client found in DB"));
+        return userRepository.findUserById(userLongId);
     }
 
     @Override
     public void deleteUserById(Long id) {
-        Optional.of(getUserById(id)).orElseThrow(() -> new UserException("No client with given ID"));
-        userRepository.deleteById(id);
+        getUserById(id);
+        userRepository.deleteUserById(id);
     }
 
     @Override

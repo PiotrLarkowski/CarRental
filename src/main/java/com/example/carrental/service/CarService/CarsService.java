@@ -4,6 +4,7 @@ import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarException;
 import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domainDto.CarDto.CarDto;
+import com.example.carrental.domainDto.CarDto.CarDtoNoList;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -15,7 +16,7 @@ public interface CarsService {
 
     void updateCar(CarDto carDto, Long id) throws Exception;
 
-    List<Car> getAllCars();
+    List<CarDtoNoList> getAllCars();
 
     Car getCarById(Long id) throws CarException;
 
