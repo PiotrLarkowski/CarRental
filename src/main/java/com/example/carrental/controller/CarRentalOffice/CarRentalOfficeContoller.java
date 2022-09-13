@@ -22,7 +22,7 @@ public class CarRentalOfficeContoller {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CarRentalOfficeList> getAllCarRentalOffice(){
+    public List<CarRentalOffice> getAllCarRentalOffice(){
         return carRentalOfficeService.getAllCarRentalOffices();
     }
 
@@ -39,12 +39,12 @@ public class CarRentalOfficeContoller {
     }
 
     @PutMapping(path ="/returnCar")
-    public void userReturnCar(@RequestParam Long userId, @RequestParam Long carId) throws Exception{
-        carRentalOfficeService.returnACar(userId,carId);
+    public void userReturnCar(@RequestParam Long userId, @RequestParam Long carId, @RequestParam Long carRentalOfficeId) throws Exception{
+        carRentalOfficeService.returnACar(userId, carId, carRentalOfficeId);
     }
 
     @PutMapping(path = "/rentCar")
-    public void userRentCar(@RequestParam Long userId, @RequestParam Long carId) throws Exception{
+    public void userRentCar(@RequestParam Long userId, @RequestParam Long carId) throws Exception{ // nie tworzy kolejnego wypożyczenia w bazie danych???
         carRentalOfficeService.rentACar(userId, carId);
     }
 }

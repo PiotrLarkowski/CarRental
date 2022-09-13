@@ -17,15 +17,15 @@ public interface CarRentalOfficeService {
 
     CarRentalOffice getCarRentalOfficeById(Long id);
 
-    List<CarRentalOfficeList> getAllCarRentalOffices();
+    List<CarRentalOffice> getAllCarRentalOffices();
 
     List<CarRentalOffice> findCarRentalOfficeByLocalDateTimeOfRent(LocalDateTime dateTime) throws CarRentalOfficeException;
 
-    List<CarRentalOfficeList> findAllDto();
+    List<CarRentalOffice> findAllDto();
 
-    boolean rentACar(Long userId, Long carId) throws Exception;
+    void rentACar(Long userId, Long carId) throws Exception;
 
-    boolean returnACar(Long userId, Long carId) throws Exception;
+    void returnACar(Long userId, Long carId, Long carRentalOfficeId) throws Exception;
 
 
 }

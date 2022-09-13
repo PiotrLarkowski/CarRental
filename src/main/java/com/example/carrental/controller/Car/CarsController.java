@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -42,22 +43,22 @@ public class CarsController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.FOUND)
-    public Collection<CarDtoNoList> getAllCars() {
+    public List<CarDtoNoList> getAllCars() {
         return carsService.getAllCars();
     }
 
     @GetMapping(path = "/filterByCarStatus/{carStatus}")
-    public Collection<Car> filterCarsByStatus(@PathVariable @Valid CarStatus carStatus) {
+    public List<Car> filterCarsByStatus(@PathVariable @Valid CarStatus carStatus) {
         return carsService.filterCarsByCarStatus(carStatus);
     }
 
     @GetMapping(path = "/filterByBodyType/{bodyType}")
-    public Collection<Car> filterCarsByBodyType(@PathVariable String bodyType) {
+    public List<Car> filterCarsByBodyType(@PathVariable String bodyType) {
         return carsService.filterCarsByBodyType(bodyType);
     }
 
     @GetMapping(path = "/filterByPrice/")
-    public Collection<Car> filterCarsByPrice(@RequestParam BigDecimal from, @RequestParam BigDecimal to) {
+    public List<Car> filterCarsByPrice(@RequestParam BigDecimal from, @RequestParam BigDecimal to) {
         return carsService.filterCarsByDayPrice(from, to);
     }
 
