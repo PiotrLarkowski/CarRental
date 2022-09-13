@@ -46,30 +46,23 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
     }
 
     @Override
-    public CarRentalOffice getCarRentalOfficeById(Long id) throws CarRentalOfficeException{
+    public CarRentalOffice getCarRentalOfficeById(Long id) throws CarRentalOfficeException {
         return Optional.of(carsRentalOfficeRepository.findById(id))
-                .orElseThrow(()-> new CarRentalOfficeException("Rental not found"));
+                .orElseThrow(() -> new CarRentalOfficeException("Rental not found"));
     }
 
     @Override
-    public List<CarRentalOfficeList> getAllCarRentalOffices() {
+    public List<CarRentalOffice> getAllCarRentalOffices() {
         return findAllDto();
     }
 
     @Override
-    public List<CarRentalOfficeList> findAllDto(){
-        return carsRentalOfficeRepository.findAll().stream()
-                .map(carRentalOffice -> CarRentalOfficeList.builder()
-                        .userName(carRentalOffice.getUser().getUserName())
-                        .carId(carRentalOffice.getCar().getId())
-                        .localDateTimeOfRent(carRentalOffice.getLocalDateTimeOfRent())
-                        .getLocalDateTimeOfReturn(carRentalOffice.getGetLocalDateTimeOfReturn())
-                        .build())
-                .collect(Collectors.toList());
+    public List<CarRentalOffice> findAllDto() {
+        return carsRentalOfficeRepository.findAll();
     }
 
     @Override
-    public List<CarRentalOffice> findCarRentalOfficeByLocalDateTimeOfRent(LocalDateTime dateTime) throws CarRentalOfficeException{
+    public List<CarRentalOffice> findCarRentalOfficeByLocalDateTimeOfRent(LocalDateTime dateTime) throws CarRentalOfficeException {
         return carsRentalOfficeRepository.findAll()
                 .stream()
                 .filter(car -> car.getLocalDateTimeOfRent().equals(dateTime))
@@ -77,51 +70,45 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
     }
 
     @Override
-    public boolean rentACar(Long userId, Long carId) throws Exception{
-        if(changeCarStatusInCarAndUser(userId, carId, CarStatus.RENTED)){
-            createCarRentalOffice(userId, carId);
-
-            return true;
-        }
-        return false;
+    public void rentACar(Long userId, Long carId) throws Exception {
+        changeCarStatusInCarAndUser(userId, carId, CarStatus.RENTED);
+        createCarRentalOffice(userId, carId);
     }
 
     @Override
-    public boolean returnACar(Long userId, Long carId) throws Exception {
-        if(changeCarStatusInCarAndUser(userId, carId, CarStatus.AVAILABLE)){
-            updateCarRentalOffice(carId);
-            return true;
-        }else{
-            return false;
-        }
+    public void returnACar(Long userId, Long carId, Long carRentalOfficeId) throws Exception {
+        changeCarStatusInCarAndUser(userId, carId, CarStatus.AVAILABLE);
+        updateCarRentalOffice(carRentalOfficeId);
+
     }
 
-    private boolean changeCarStatusInCarAndUser(Long userId, Long carId, CarStatus carStatus) throws Exception{
+    private boolean changeCarStatusInCarAndUser(Long userId, Long carId, CarStatus carStatus) throws Exception {
         User user = getUserById(userId);
-        if(haveUserCarRent(user)) {
-            Car carToRent = getCarById(carId);
-            if (checkCarStatusMatchVariable(carToRent)) {
-                updateCarStatus(carToRent, carStatus);
-                updateUserCarStatus(carId, carStatus, user);
-                return true;
-            }
-            else{
-                return false;
-            }
+        Car carToRent = getCarById(carId);
+        CarStatus carStatusToRent = carToRent.getCarStatus();
+//        boolean equalsCarId = user.getUserCarId().equals(carId);
+
+        //zwrot auta!
+        if (user.getUserCarId() != null && user.getUserCarId().equals(carId)) { //sprawdzanie czy użytkownik ma wynajęte auto
+            updateCarStatus(carToRent, carStatus);
+            updateUserCarStatus(carId, carStatus, user);
+            return true;
+        } else if (user.getUserCarId() == null) {
+            updateCarStatus(carToRent, carStatus);
+            updateUserCarStatus(carId, carStatus, user);
+            return true;
         }
-        else{
-            return false;
-        }
+        throw new CarRentalOfficeException("Value doesn't match, please write proper value!");
     }
 
     private void updateUserCarStatus(Long carId, CarStatus carStatus, User user) throws Exception {
         if (carStatus.equals(CarStatus.AVAILABLE)) {
-            user.setUserCarId(carId);
-        } else {
             user.setUserCarId(null);
+        } else {
+            user.setUserCarId(carId);
         }
-        usersService.updateUser(new UserDto(user.getUserLogin(), user.getUserPassword(), user.getUserName()
-                , user.getUserLastName(), user.getUserEMail(), user.getUserAddress(), user.getUserCarId(), user.getRole(), user.getStatus()), user.getId());
+        usersService.updateUser(new UserDto(user.getUserLogin(), user.getUserPassword(), user.getUserName(),
+                user.getUserLastName(), user.getUserEMail(), user.getUserAddress(), user.getUserCarId(), user.getRole(), user.getStatus()), user.getId());
     }
 
     private CarRentalOffice createCarRentalOffice(Long userId, Long carId) throws CarException {
@@ -139,12 +126,12 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         return newCarRentalOffice;
     }
 
-    private void updateCarRentalOffice(Long carRentalOfficeId){
+    private void updateCarRentalOffice(Long carRentalOfficeId) {
         CarRentalOffice rentalOfficeToUpdate = Optional.of(carsRentalOfficeRepository.findById(carRentalOfficeId))
                 .orElseThrow(() -> new CarRentalOfficeException("Couldn't find rent"));
         CarRentalOffice updatedCarRentalOffice = new CarRentalOffice(carRentalOfficeId, rentalOfficeToUpdate.getUser(),
-                rentalOfficeToUpdate.getCar(),rentalOfficeToUpdate.getLocalDateTimeOfRent(),
-                rentalOfficeToUpdate.getGetLocalDateTimeOfReturn());
+                rentalOfficeToUpdate.getCar(), rentalOfficeToUpdate.getLocalDateTimeOfRent(),
+                LocalDateTime.now());
         carsRentalOfficeRepository.save(updatedCarRentalOffice);
     }
 
@@ -155,10 +142,10 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
     }
 
     private boolean checkCarStatusMatchVariable(Car carToRent) {
-        if(carToRent.getCarStatus() == CarStatus.AVAILABLE){
+        if (carToRent.getCarStatus() == CarStatus.AVAILABLE) {
 //            carToRent.setCarStatus(CarStatus.RENTED);
             return true;
-        } else if(carToRent.getCarStatus() == CarStatus.RENTED){
+        } else if (carToRent.getCarStatus() == CarStatus.RENTED) {
 //            carToRent.setCarStatus(CarStatus.AVAILABLE);
             return true;
         }
@@ -171,7 +158,8 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
     }
 
     private boolean haveUserCarRent(User user) {
-        if(user.getUserCarId() != null) {
+        //jeżeli ma wynajęte carId = 3
+        if (user.getUserCarId() != null) {
             new CarException("User has already rented car");
             return false;
         }

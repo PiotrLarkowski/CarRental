@@ -38,5 +38,4 @@ public class Car {
     private CarStatus carStatus;
 
     private BigDecimal dayPrice;
-
 }

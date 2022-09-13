@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +31,8 @@ public class CarFactory implements CommandLineRunner {
                 new CarDto("fiat", "panda", "sedan", 2005, "red", 100000, CarStatus.BROKEN, BigDecimal.valueOf(150000L)),
                 new CarDto("bmw", "3", "sedan", 1958, "black", 150000, CarStatus.RENTED, BigDecimal.valueOf(350000L))
         ));
+
+
 
         for(int i =0; i<listCarExample.size(); i++) {
             carsService.createCar(listCarExample.get(i));
