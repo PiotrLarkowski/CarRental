@@ -5,6 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CarsRepository extends JpaRepository<Car, Long> {
     void deleteById(Long id);
-
     Car findCarById(Long id);
 }

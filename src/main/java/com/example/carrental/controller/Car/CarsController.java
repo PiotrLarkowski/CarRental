@@ -24,16 +24,15 @@ public class CarsController {
 
     private final CarsService carsService;
 
-
     public CarsController(CarsService carsService) {
         System.out.println("CarsService " + carsService);
         this.carsService = carsService;
     }
 
-    @PostMapping
+    @PostMapping(path ="/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Car createCar(@RequestBody @Valid CarDto carDto) {
-        return carsService.createCar(carDto);
+    public Car createCar(@RequestBody @Valid CarDto carDto, @PathVariable Long id) {
+        return carsService.createCar(carDto, id);
     }
 
     @PutMapping(path = "/{id}")
@@ -43,7 +42,7 @@ public class CarsController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.FOUND)
-    public List<CarDtoNoList> getAllCars() {
+    public List<Car> getAllCars() {
         return carsService.getAllCars();
     }
 
