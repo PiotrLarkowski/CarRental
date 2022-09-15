@@ -56,7 +56,7 @@ public class CarsController {
         return carsService.filterCarsByBodyType(bodyType);
     }
 
-    @GetMapping(path = "/filterByPrice/")
+    @GetMapping(path = "/filterByPrice")
     public List<Car> filterCarsByPrice(@RequestParam BigDecimal from, @RequestParam BigDecimal to) {
         return carsService.filterCarsByDayPrice(from, to);
     }

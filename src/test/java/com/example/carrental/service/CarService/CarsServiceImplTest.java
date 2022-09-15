@@ -15,22 +15,26 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class CarsServiceImplTest {
 
     @Mock
-    private CarsService carsService;
-
+    private CarsRepository carsRepository;
+    @Mock
+    private RentalBranchRepository rentalBranchRepository;
 
     @Test
-    public void shouldUpdateACor() throws Exception {
+    public void shouldUpdateACar() throws Exception {
+
+        CarsServiceImpl carsService = new CarsServiceImpl(carsRepository, rentalBranchRepository);
+
         //given
         Long carId = 1L;
-        Car car = new Car(carId, 1L, "Mark", "Model", "bodyType", 1990,
-                "Red", 3, CarStatus.AVAILABLE, BigDecimal.valueOf(15));
-        Mockito.when(carsService.getCarById(carId)).thenReturn(car);
-
+        Mockito.when(carsRepository.findCarById(carId)).thenReturn(new Car(carId, 1L, "Mark", "Model", "bodyType", 1990,
+                "Red", 3, CarStatus.AVAILABLE, BigDecimal.valueOf(15)));
 
         CarDto carDto = new CarDto(carId, "Mark", "Model", "bodyType", 1990,
                 "Green", 3, CarStatus.AVAILABLE, BigDecimal.valueOf(15));
@@ -39,7 +43,22 @@ class CarsServiceImplTest {
         carsService.updateCar(carDto,carId);
 
         //then
-        assertEquals("","");
+        verify(carsRepository,times(1)).save(Mockito.any());
     }
+    @Test
+    public void shouldDeleteACar() throws Exception {
 
+        CarsServiceImpl carsService = new CarsServiceImpl(carsRepository, rentalBranchRepository);
+
+        //given
+        Long carId = 1L;
+        Mockito.when(carsRepository.findCarById(carId)).thenReturn(new Car(carId, 1L, "Mark", "Model", "bodyType", 1990,
+                "Red", 3, CarStatus.AVAILABLE, BigDecimal.valueOf(15)));
+
+        //when
+        carsService.deleteCarById(carId);
+
+        //then
+        verify(carsRepository,times(1)).delete(Mockito.any());
+    }
 }

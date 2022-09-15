@@ -1,53 +1,115 @@
 package com.example.carrental.service.RentalOfficeService;
 
+import com.example.carrental.domain.Car.Car;
+import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domain.User.User;
+import com.example.carrental.domainDto.CarDto.CarDto;
 import com.example.carrental.repository.*;
 import com.example.carrental.service.CarService.CarsService;
 import com.example.carrental.service.CarService.CarsServiceImpl;
 import com.example.carrental.service.IncomeService.IncomesService;
 import com.example.carrental.service.UserService.UsersService;
+import com.example.carrental.service.UserService.UsersServiceImpl;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExecutableInvoker;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.OngoingStubbing;
 
+import java.math.BigDecimal;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+@ExtendWith(MockitoExtension.class)
 class CarsRentalOfficeImplTest {
 
-//    @Mock
-//    private CarsRentalOfficeRepository carsRentalOfficeRepository;
-//
-//    @Mock
-//    private CarsRepository carsRepository;
-//    @Mock
-//    private RentalBranchRepository rentalBranchRepository;
-//
-//    private CarsService carsService;
-//
-//    @Mock
-//    private UserRepository userRepository;
-//
-//    @Mock
-//    private IncomesService incomeService;
-//
-//    @Mock
-//    private IncomeRepository incomeRepository;
+    @Mock
+    private CarsRentalOfficeRepository carsRentalOfficeRepository;
 
-//    @Test
-//    public void shouldAllowUserToRentACar(){
-//        //given
-//        Mockito.when(usersService.getUserById(Mockito.anyLong())).thenReturn(new User());
-//        new CarsServiceImpl(carsRepository, rentalBranchRepository);
-//        //Za pomocą mohito zamocować specyficzne zachowanie dla tego testu
-//
-//        //when
-//        new CarRentalOfficeService.rentACar(1,2);
-//        //then
-//
-//        //Czy uzytkownik sie zaktualizowal (save do repozytorium)
-//        //Czy car sie zaktualizowal (save do repozytorium)
-//        //Czy CarRentalOffice sie zaktualizowal (save do repozytorium)
-//
-//        //Czy nie polecial zaden Exception
-//    }
+    @Mock
+    private CarsRepository carsRepository;
+    @Mock
+    private RentalBranchRepository rentalBranchRepository;
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private IncomesService incomeService;
+
+    @Mock
+    private IncomeRepository incomeRepository;
+
+    @Test
+    public void shouldAllowUserToRentACar() throws Exception {
+        //given
+
+        Long carId = 1L;
+        Long userId = 1L;
+        Long carRentalBranchId = 1L;
+
+        CarsServiceImpl carService = new CarsServiceImpl(carsRepository, rentalBranchRepository);
+
+        UsersServiceImpl usersService = new UsersServiceImpl(userRepository);
+
+        CarsRentalOfficeImpl carsRentalOfficeService = new CarsRentalOfficeImpl(carsRentalOfficeRepository,carService,usersService,incomeService,incomeRepository);
+
+        Mockito.when(carsRepository.findCarById(carId)).thenReturn(new Car(carId, carRentalBranchId, "Mark", "Model", "bodyType", 1990,
+                "Red", 3, CarStatus.AVAILABLE, BigDecimal.valueOf(15)));
+
+        Mockito.when(userRepository.findUserById(userId)).thenReturn(new User(userId, "Login",
+                "Password","name","lastName","aa@op.pl","address",
+                null,"USER","ACTIVE"));
+
+        //when
+        carsRentalOfficeService.rentACar(carId,userId);
+
+        //then
+        verify(userRepository,times(1)).save(Mockito.any());
+
+        verify(carsRepository,times(1)).save(Mockito.any());
+
+        verify(carsRentalOfficeRepository,times(1)).save(Mockito.any());
 
 
+    }
+
+    @Test
+    public void shouldNotAllowUserToRentACarBecouseUsrHavelreadyRentACar() throws Exception {
+        //given
+
+        Long carId = 1L;
+        Long userId = 1L;
+        Long carRentalBranchId = 1L;
+
+        CarsServiceImpl carService = new CarsServiceImpl(carsRepository, rentalBranchRepository);
+
+        UsersServiceImpl usersService = new UsersServiceImpl(userRepository);
+
+        CarsRentalOfficeImpl carsRentalOfficeService = new CarsRentalOfficeImpl(carsRentalOfficeRepository,carService,usersService,incomeService,incomeRepository);
+
+        Mockito.when(carsRepository.findCarById(carId)).thenReturn(new Car(carId, carRentalBranchId, "Mark", "Model", "bodyType", 1990,
+                "Red", 3, CarStatus.AVAILABLE, BigDecimal.valueOf(15)));
+
+        Mockito.when(userRepository.findUserById(userId)).thenReturn(new User(userId, "Login",
+                "Password","name","lastName","aa@op.pl","address",
+                carId,
+                "USER","ACTIVE"));
+
+        //when
+        carsRentalOfficeService.rentACar(carId,userId);
+
+        //then
+        verify(userRepository,times(0)).save(Mockito.any());
+
+        verify(carsRepository,times(0)).save(Mockito.any());
+
+        verify(carsRentalOfficeRepository,times(0)).save(Mockito.any());
+
+
+    }
 }

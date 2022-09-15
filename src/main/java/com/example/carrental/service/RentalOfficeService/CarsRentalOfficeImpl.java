@@ -18,6 +18,7 @@ import com.example.carrental.service.CarService.CarsService;
 import com.example.carrental.service.IncomeService.IncomesService;
 import com.example.carrental.service.UserService.UsersService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -75,13 +76,13 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         createCarRentalOffice(userId, carId);
     }
 
+    @Transactional
     @Override
     public void returnACar(Long userId, Long carId, Long carRentalOfficeId) throws Exception {
         changeCarStatusInCarAndUser(userId, carId, CarStatus.AVAILABLE);
         updateCarRentalOffice(carRentalOfficeId);
-
     }
-//Transactional
+
     private boolean changeCarStatusInCarAndUser(Long userId, Long carId, CarStatus carStatus) throws Exception {
         User user = getUserById(userId);
         Car carToRent = getCarById(carId);
@@ -154,7 +155,6 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
     }
 
     private boolean haveUserCarRent(User user) {
-        //jeżeli ma wynajęte carId = 3
         if (user.getUserCarId() != null) {
             new CarException("User has already rented car");
             return false;
