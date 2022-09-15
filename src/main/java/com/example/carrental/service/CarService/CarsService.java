@@ -12,11 +12,11 @@ import java.util.List;
 
 public interface CarsService {
 
-    Car createCar(CarDto carDto);
+    Car createCar(CarDto carDto, Long rentalBranchId);
 
     void updateCar(CarDto carDto, Long id) throws Exception;
 
-    List<CarDtoNoList> getAllCars();
+    List<Car> getAllCars();
 
     Car getCarById(Long id) throws CarException;
 

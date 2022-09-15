@@ -23,6 +23,8 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long rentalBranchId;
+
     private String mark;
 
     private String model;

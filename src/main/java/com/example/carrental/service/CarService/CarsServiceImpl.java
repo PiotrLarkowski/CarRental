@@ -3,59 +3,62 @@ package com.example.carrental.service.CarService;
 import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarException;
 import com.example.carrental.domain.Car.CarStatus;
+import com.example.carrental.domain.RentalBranch.RentalBranch;
 import com.example.carrental.domainDto.CarDto.CarDto;
 import com.example.carrental.domainDto.CarDto.CarDtoNoList;
 import com.example.carrental.repository.CarsRepository;
+import com.example.carrental.repository.RentalBranchRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Service
 @Transactional
 public class CarsServiceImpl implements CarsService {
 
     private final CarsRepository carsRepository;
+    private final RentalBranchRepository rentalBranchRepository;
 
-    public CarsServiceImpl(CarsRepository carsRepository) {
+    public CarsServiceImpl(CarsRepository carsRepository, RentalBranchRepository rentalBranchRepository) {
         this.carsRepository = carsRepository;
+        this.rentalBranchRepository = rentalBranchRepository;
     }
 
     @Override
-    public Car createCar(CarDto carDto) {
-        Car car = new Car(null, carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
-                carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice());
+    public Car createCar(CarDto carDto, Long rentalBranchId) {
+        RentalBranch rentalBranchById = rentalBranchRepository.findRentalBranchById(rentalBranchId);
+        Car car = Car.builder()
+                .rentalBranchId(rentalBranchId)
+                .mark(carDto.getMark())
+                .model(carDto.getModel())
+                .bodyType(carDto.getBodyType())
+                .yearOfProduction(carDto.getYearOfProduction())
+                .colour(carDto.getColour())
+                .run(carDto.getRun())
+                .carStatus(carDto.getCarStatus())
+                .dayPrice(carDto.getDayPrice())
+                .build();
         carsRepository.save(car);
+        rentalBranchById.getCars().add(car);
         return car;
     }
 
     @Override
     public void updateCar(CarDto carDto, Long id) throws Exception{
         Car carToUpdate = getCarById(id);
-        Car car = new Car(carToUpdate.getId(), carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
+        Car car = new Car(carToUpdate.getId(), carDto.getRentalBranchId(), carDto.getMark(), carDto.getModel(), carDto.getBodyType(), carDto.getYearOfProduction(),
                 carDto.getColour(), carDto.getRun(), carDto.getCarStatus(), carDto.getDayPrice());
         carsRepository.save(car);
     }
 
     @Override
-    public List<CarDtoNoList> getAllCars() {
-        return carsRepository.findAll().stream()
-                .map(car -> CarDtoNoList.builder()
-                        .id(car.getId())
-                        .mark(car.getMark())
-                        .model(car.getModel())
-                        .bodyType(car.getBodyType())
-                        .yearOfProduction(car.getYearOfProduction())
-                        .colour(car.getColour())
-                        .run(car.getRun())
-                        .carStatus(car.getCarStatus())
-                        .dayPrice(car.getDayPrice())
-                        .build())
-                .collect(Collectors.toList());
+    public List<Car> getAllCars() {
+        return carsRepository.findAll();
     }
 
     @Override
@@ -102,6 +105,7 @@ public class CarsServiceImpl implements CarsService {
     public void deleteCarById(Long id) throws CarException {
         Car carById = validCarId(id);
         carsRepository.delete(carById);
+        log.info("Car with id" + id + " successfully deleted");
     }
 
     private boolean isInRange(BigDecimal price, BigDecimal from, BigDecimal to) {
@@ -109,7 +113,7 @@ public class CarsServiceImpl implements CarsService {
     }
 
     private Car validCarId(Long id) throws CarException {
-       return Optional.of(carsRepository.findCarById(id)).orElseThrow(() -> new CarException("Couldn't find specific id"));
+       return Optional.of(carsRepository.findCarById(id)).orElseThrow(() -> new CarException("Couldn't find specific id: " + id));
     }
 
 }

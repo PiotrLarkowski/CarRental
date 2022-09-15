@@ -16,6 +16,7 @@ import java.util.List;
 @Builder
 public class CarDto {
 
+    private Long rentalBranchId;
     private String mark;
     private String model;
     private String bodyType;

@@ -81,15 +81,11 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         updateCarRentalOffice(carRentalOfficeId);
 
     }
-
+//Transactional
     private boolean changeCarStatusInCarAndUser(Long userId, Long carId, CarStatus carStatus) throws Exception {
         User user = getUserById(userId);
         Car carToRent = getCarById(carId);
-        CarStatus carStatusToRent = carToRent.getCarStatus();
-//        boolean equalsCarId = user.getUserCarId().equals(carId);
-
-        //zwrot auta!
-        if (user.getUserCarId() != null && user.getUserCarId().equals(carId)) { //sprawdzanie czy użytkownik ma wynajęte auto
+        if (user.getUserCarId() != null && user.getUserCarId().equals(carId)) {
             updateCarStatus(carToRent, carStatus);
             updateUserCarStatus(carId, carStatus, user);
             return true;
@@ -136,7 +132,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
     }
 
     private void updateCarStatus(Car carToRent, CarStatus carStatus) throws Exception {
-        carsService.updateCar(new CarDto(carToRent.getMark(), carToRent.getModel(), carToRent.getBodyType(),
+        carsService.updateCar(new CarDto(carToRent.getRentalBranchId(), carToRent.getMark(), carToRent.getModel(), carToRent.getBodyType(),
                 carToRent.getYearOfProduction(), carToRent.getColour(), carToRent.getRun(),
                 carStatus, carToRent.getDayPrice()), carToRent.getId());
     }
