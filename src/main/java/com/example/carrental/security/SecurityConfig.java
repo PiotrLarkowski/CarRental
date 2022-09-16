@@ -1,9 +1,8 @@
-package com.example.carrental.Security;
+package com.example.carrental.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -47,19 +46,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE,"/car/{id}").hasRole("ADMIN")
                 //User permissions
                 .antMatchers(HttpMethod.GET,"/user").hasAnyRole("MODERATOR", "ADMIN")
+                .antMatchers(HttpMethod.GET,"/user/{id}").hasAnyRole("MODERATOR", "ADMIN")
+                .antMatchers(HttpMethod.GET,"/user/userLogin/{login}").hasAnyRole("MODERATOR", "ADMIN")
+                .antMatchers(HttpMethod.GET,"/user/userEmail/{email}").hasAnyRole("MODERATOR", "ADMIN")
                 .antMatchers(HttpMethod.POST,"/user").hasAnyRole("MODERATOR", "ADMIN")
-                .antMatchers(HttpMethod.PUT,"/user").hasAnyRole("MODERATOR", "ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/user").hasAnyRole("MODERATOR", "ADMIN")
+                .antMatchers(HttpMethod.POST,"/user/log/in").permitAll()
+                .antMatchers(HttpMethod.PUT,"/user/{id}").hasAnyRole("MODERATOR", "ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/user/{id}").hasRole("ADMIN")
                 //CarRentalOffice permissions
                 .antMatchers(HttpMethod.GET,"/carRentalOffice").hasAnyRole("MODERATOR", "ADMIN")
-                .antMatchers(HttpMethod.PUT,"/carRentalOffice").hasAnyRole("MODERATOR", "ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/carRentalOffice").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/carRentalOffice/{id}").hasAnyRole("MODERATOR", "ADMIN")
+                .antMatchers(HttpMethod.GET,"/carRentalOffice/dateTime/{localDateTime}").hasAnyRole("MODERATOR", "ADMIN")
+                .antMatchers(HttpMethod.PUT,"/carRentalOffice/returnCar").hasAnyRole("MODERATOR", "ADMIN", "USER")
+                .antMatchers(HttpMethod.PUT,"/carRentalOffice/rentCar").hasAnyRole("MODERATOR", "ADMIN", "USER")
                 //Income permissions
-                .antMatchers(HttpMethod.POST,"/carRentalOffice").hasRole("MODERATOR")
+                .antMatchers(HttpMethod.GET,"/income").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/income/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/income/month/{month}").hasRole("ADMIN")
                 //Rental branch permissions
                 .antMatchers(HttpMethod.GET,"/rentalBranch").permitAll()
-                .antMatchers(HttpMethod.POST,"/rentalBranch").hasAnyRole("MODERATOR", "ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/rentalBranch").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/rentalBranch/{id}").permitAll()
+                .antMatchers(HttpMethod.POST,"/rentalBranch").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/rentalBranch/{id}").hasRole("ADMIN")
 
                 .and()
                 .formLogin().permitAll()
