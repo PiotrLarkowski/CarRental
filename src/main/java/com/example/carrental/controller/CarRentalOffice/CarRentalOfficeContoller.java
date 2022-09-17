@@ -38,13 +38,13 @@ public class CarRentalOfficeContoller {
         return carRentalOfficeService.findCarRentalOfficeByLocalDateTimeOfRent(localDateTime);
     }
 
-    @PutMapping(path ="/returnCar")
-    public void userReturnCar(@RequestParam Long userId, @RequestParam Long carId, @RequestParam Long carRentalOfficeId) throws Exception{
-        carRentalOfficeService.returnACar(userId, carId, carRentalOfficeId);
+    @PutMapping(path ="/returnCar/{carRentalOfficeId}")
+    public void userReturnCar(@PathVariable Long carRentalOfficeId) throws Exception{
+        carRentalOfficeService.returnACar(carRentalOfficeId);
     }
 
-    @PutMapping(path = "/rentCar")
-    public void userRentCar(@RequestParam Long userId, @RequestParam Long carId) throws Exception{ // nie tworzy kolejnego wypożyczenia w bazie danych???
+    @PutMapping(path = "/rentCar/{userId}/{carId}")
+    public void userRentCar(@PathVariable Long userId, @PathVariable Long carId) throws Exception{
         carRentalOfficeService.rentACar(userId, carId);
     }
 }

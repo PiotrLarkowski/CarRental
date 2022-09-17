@@ -1,7 +1,7 @@
 package com.example.carrental.domain.RentalOffice;
 
 import com.example.carrental.domain.Car.Car;
-import com.example.carrental.domain.User.User;
+import com.example.carrental.domain.User.CarRentalUser;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,7 +23,7 @@ public class CarRentalOffice {
 
     @ManyToOne
     @JoinColumn(name = "userId")
-    private User user;
+    private CarRentalUser user;
 
     @ManyToOne
     @JoinColumn(name = "carId")

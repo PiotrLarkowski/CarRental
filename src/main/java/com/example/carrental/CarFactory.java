@@ -59,13 +59,13 @@ public class CarFactory implements CommandLineRunner {
         List<UserDto> listUserExample = new ArrayList<>(Arrays.asList(
                 new UserDto("Piotr","Piotr123","Piotr","Larkowski",
                         "p.larkowski90@gmail.com","Zakopane",null,
-                        "CUSTOMER","false"),
+                        "USER","false"),
                 new UserDto("Pawel","Pawel123","Pawel","Jabloniec",
                         "pawjab90@gmail.com","Gdansk",null,
-                        "CUSTOMER","false"),
+                        "USER","false"),
                 new UserDto("Przemek","Przemek123","Przemek","Gesiewski",
                         "p.gesiewski@gmail.com","Lodz",null,
-                        "CUSTOMER","false")
+                        "USER","false")
         ));
 
         for(int i =0; i<listUserExample.size(); i++) {

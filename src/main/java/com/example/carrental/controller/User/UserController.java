@@ -1,6 +1,6 @@
 package com.example.carrental.controller.User;
 
-import com.example.carrental.domain.User.User;
+import com.example.carrental.domain.User.CarRentalUser;
 import com.example.carrental.domainDto.UserDto.UserDto;
 import com.example.carrental.service.UserService.UsersService;
 import org.jetbrains.annotations.NotNull;
@@ -23,13 +23,13 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody @Valid UserDto userDto){
+    public CarRentalUser createUser(@RequestBody @Valid UserDto userDto){
         return usersService.createUser(userDto);
     }
 
     @PostMapping(path = "/log/in")
     @ResponseStatus(HttpStatus.OK)
-    public User sendUser(@RequestBody @Valid @NotNull UserDto userDto){
+    public CarRentalUser sendUser(@RequestBody @Valid @NotNull UserDto userDto){
         return usersService.findUserByUserLogin(userDto.getUserLogin());
     }
 
@@ -40,7 +40,7 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.FOUND)
-    public Collection<User> getAllUser(){
+    public Collection<CarRentalUser> getAllUser(){
         return usersService.getAllUsers();
     }
 
@@ -56,13 +56,13 @@ public class UserController {
 
     @GetMapping(path="/userEmail/{email}")
     @ResponseStatus(HttpStatus.FOUND)
-    public User findUserByEmail(@PathVariable String email){
+    public CarRentalUser findUserByEmail(@PathVariable String email){
         return usersService.findUserByUserEmail(email);
     }
 
     @GetMapping(path="/userLogin/{login}")
     @ResponseStatus(HttpStatus.FOUND)
-    public User findUserByLogin(@PathVariable String login){
+    public CarRentalUser findUserByLogin(@PathVariable String login){
         return usersService.findUserByUserLogin(login);
     }
 
