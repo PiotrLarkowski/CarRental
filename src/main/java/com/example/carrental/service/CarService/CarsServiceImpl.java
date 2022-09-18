@@ -5,7 +5,6 @@ import com.example.carrental.domain.Car.CarException;
 import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domain.RentalBranch.RentalBranch;
 import com.example.carrental.domainDto.CarDto.CarDto;
-import com.example.carrental.domainDto.CarDto.CarDtoNoList;
 import com.example.carrental.repository.CarsRepository;
 import com.example.carrental.repository.RentalBranchRepository;
 import lombok.extern.slf4j.Slf4j;

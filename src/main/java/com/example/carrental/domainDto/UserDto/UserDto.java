@@ -1,10 +1,6 @@
 package com.example.carrental.domainDto.UserDto;
 
-import com.example.carrental.domain.RentalOffice.CarRentalOffice;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -25,8 +21,4 @@ public class UserDto {
     private String role;
     private String status;
 
-    public UserDto(String userLogin, String userPassword) {
-        this.userLogin = userLogin;
-        this.userPassword = userPassword;
-    }
 }

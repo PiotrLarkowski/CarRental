@@ -3,7 +3,6 @@ package com.example.carrental.service.RentalBranchService;
 import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.RentalBranch.RentalBranch;
 import com.example.carrental.domainDto.RentalBranchDto.RentalBranchDto;
-import org.hibernate.annotations.Cascade;
 
 import java.util.List;
 

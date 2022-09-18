@@ -1,6 +1,5 @@
 package com.example.carrental.security;
 
-//import com.example.carrental.domain.User.User;
 import com.example.carrental.domain.User.CarRentalUser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

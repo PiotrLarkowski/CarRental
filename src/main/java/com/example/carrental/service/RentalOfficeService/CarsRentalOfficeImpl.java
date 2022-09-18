@@ -76,7 +76,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
 
     @Transactional
     @Override
-    public void returnACar(Long carRentalOfficeId) throws Exception { //TODO usunąłem podawaie car i miejsca wypożyczenia i opozostawiłem tylko id auta jakie się zwraca
+    public void returnACar(Long carRentalOfficeId) throws Exception {
         changeCarStatusInCarAndUser(getCarRentalOfficeById(carRentalOfficeId).getUser().getId(), getCarRentalOfficeById(carRentalOfficeId).getCar().getId(), CarStatus.AVAILABLE);
         updateCarRentalOffice(carRentalOfficeId);
     }
@@ -84,13 +84,15 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
     private boolean changeCarStatusInCarAndUser(Long userId, Long carId, CarStatus carStatus) throws Exception {
         CarRentalUser user = getUserById(userId);
         Car carToRent = getCarById(carId);
-//        Optional.of(user.getUserCarId()).orElseThrow(() -> new CarException("User don't have a car"));
-        if (user.getUserCarId() == null || user.getUserCarId().equals(carId)) { //TODO odwróciłem kolejność i wyrzuciłem warunek z if
-            updateCarStatus(carToRent, carStatus);
-            updateUserCarStatus(carId, carStatus, user);
-            return true;
+        if(carToRent.getCarStatus() == CarStatus.AVAILABLE || carToRent.getCarStatus() == CarStatus.RENTED) {
+            if (user.getUserCarId() == null || user.getUserCarId().equals(carId)) {
+                updateCarStatus(carToRent, carStatus);
+                updateUserCarStatus(carId, carStatus, user);
+                return true;
+            }
+            throw new CarRentalOfficeException("Value doesn't match, please write proper value!");
         }
-        throw new CarRentalOfficeException("Value doesn't match, please write proper value!");
+        throw new CarException("Car can't be be return or rent");
     }
 
     private void updateUserCarStatus(Long carId, CarStatus carStatus, CarRentalUser user) throws Exception {
@@ -133,28 +135,9 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
                 carStatus, carToRent.getDayPrice()), carToRent.getId());
     }
 
-    private boolean checkCarStatusMatchVariable(Car carToRent) {
-        if (carToRent.getCarStatus() == CarStatus.AVAILABLE) {
-//            carToRent.setCarStatus(CarStatus.RENTED);
-            return true;
-        } else if (carToRent.getCarStatus() == CarStatus.RENTED) {
-//            carToRent.setCarStatus(CarStatus.AVAILABLE);
-            return true;
-        }
-        return false;
-    }
-
     private Car getCarById(Long carId) throws CarException {
         Car carToRent = Optional.of(carsService.getCarById(carId)).orElseThrow(() -> new CarException("No car with given id"));
         return carToRent;
-    }
-
-    private boolean haveUserCarRent(CarRentalUser user) {
-        if (user.getUserCarId() != null) {
-            new CarException("User has already rented car");
-            return false;
-        }
-        return true;
     }
 
     private CarRentalUser getUserById(Long userId) {

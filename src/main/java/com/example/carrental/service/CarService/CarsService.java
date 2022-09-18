@@ -4,10 +4,8 @@ import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarException;
 import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domainDto.CarDto.CarDto;
-import com.example.carrental.domainDto.CarDto.CarDtoNoList;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 
 public interface CarsService {
