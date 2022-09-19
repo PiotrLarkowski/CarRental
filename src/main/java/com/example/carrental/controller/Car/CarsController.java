@@ -1,22 +1,17 @@
 package com.example.carrental.controller.Car;
 
-import com.example.carrental.controller.OwnExceptionHandler;
 import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarException;
 import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domainDto.CarDto.CarDto;
-import com.example.carrental.domainDto.CarDto.CarDtoNoList;
 import com.example.carrental.service.CarService.CarsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/car")

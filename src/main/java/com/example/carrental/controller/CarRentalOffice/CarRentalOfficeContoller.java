@@ -1,7 +1,6 @@
 package com.example.carrental.controller.CarRentalOffice;
 
 import com.example.carrental.domain.RentalOffice.CarRentalOffice;
-import com.example.carrental.domainDto.RentalOffice.CarRentalOfficeList;
 import com.example.carrental.service.RentalOfficeService.CarRentalOfficeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

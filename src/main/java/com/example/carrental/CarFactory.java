@@ -1,7 +1,6 @@
 package com.example.carrental;
 
 import com.example.carrental.domain.Car.CarStatus;
-import com.example.carrental.domain.RentalBranch.RentalBranch;
 import com.example.carrental.domainDto.CarDto.CarDto;
 import com.example.carrental.domainDto.RentalBranchDto.RentalBranchDto;
 import com.example.carrental.domainDto.UserDto.UserDto;
@@ -32,9 +31,7 @@ public class CarFactory implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
         providedExampleData();
-
     }
 
     private void providedExampleData() {
@@ -49,7 +46,6 @@ public class CarFactory implements CommandLineRunner {
                 new RentalBranchDto(new ArrayList<>(),"Gdansk", "Aleje Wojska Polskiego", "80-366"),
                 new RentalBranchDto(new ArrayList<>(),"Lodz", "Klonowa","90-003")
         ));
-
         for(int i =0; i<listRentalBranch.size(); i++) {
             rentalBranchService.createRentalBranch(listRentalBranch.get(i));
         }
@@ -67,7 +63,6 @@ public class CarFactory implements CommandLineRunner {
                         "p.gesiewski@gmail.com","Lodz",null,
                         "USER","false")
         ));
-
         for(int i =0; i<listUserExample.size(); i++) {
             usersService.createUser(listUserExample.get(i));
         }
@@ -93,7 +88,6 @@ public class CarFactory implements CommandLineRunner {
                 new CarDto(3L,"fiat", "panda", "sedan", 2005, "red", 100000, CarStatus.BROKEN, BigDecimal.valueOf(150000L)),
                 new CarDto(3L,"bmw", "3", "sedan", 1958, "black", 150000, CarStatus.AVAILABLE, BigDecimal.valueOf(350000L))
         ));
-
         for(int i =0; i<listCarExample.size(); i++) {
             carsService.createCar(listCarExample.get(i), listCarExample.get(i).getRentalBranchId());
         }

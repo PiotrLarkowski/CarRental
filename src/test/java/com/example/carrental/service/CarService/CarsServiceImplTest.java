@@ -10,11 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import org.junit.jupiter.api.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -31,7 +29,7 @@ class CarsServiceImplTest {
 
         CarsServiceImpl carsService = new CarsServiceImpl(carsRepository, rentalBranchRepository);
 
-        //given
+        //GIVEN
         Long carId = 1L;
         Mockito.when(carsRepository.findCarById(carId)).thenReturn(new Car(carId, 1L, "Mark", "Model", "bodyType", 1990,
                 "Red", 3, CarStatus.AVAILABLE, BigDecimal.valueOf(15)));
@@ -39,10 +37,10 @@ class CarsServiceImplTest {
         CarDto carDto = new CarDto(carId, "Mark", "Model", "bodyType", 1990,
                 "Green", 3, CarStatus.AVAILABLE, BigDecimal.valueOf(15));
 
-        //when
+        //WHEN
         carsService.updateCar(carDto,carId);
 
-        //then
+        //THEN
         verify(carsRepository,times(1)).save(Mockito.any());
     }
     @Test
@@ -50,15 +48,15 @@ class CarsServiceImplTest {
 
         CarsServiceImpl carsService = new CarsServiceImpl(carsRepository, rentalBranchRepository);
 
-        //given
+        //GIVEN
         Long carId = 1L;
         Mockito.when(carsRepository.findCarById(carId)).thenReturn(new Car(carId, 1L, "Mark", "Model", "bodyType", 1990,
                 "Red", 3, CarStatus.AVAILABLE, BigDecimal.valueOf(15)));
 
-        //when
+        //WHEN
         carsService.deleteCarById(carId);
 
-        //then
+        //THEN
         verify(carsRepository,times(1)).delete(Mockito.any());
     }
 }
