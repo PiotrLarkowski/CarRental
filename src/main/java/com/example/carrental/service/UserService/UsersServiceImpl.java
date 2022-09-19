@@ -1,9 +1,10 @@
 package com.example.carrental.service.UserService;
 
-import com.example.carrental.domain.User.User;
+import com.example.carrental.domain.User.CarRentalUser;
 import com.example.carrental.domain.User.UserException;
 import com.example.carrental.domainDto.UserDto.UserDto;
 import com.example.carrental.repository.UserRepository;
+import com.example.carrental.security.SecurityConfig;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -18,9 +19,9 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public User createUser(UserDto userDto) {
+    public CarRentalUser createUser(UserDto userDto) {
 
-        User user = User.builder()
+        CarRentalUser user = CarRentalUser.builder()
                 .userLogin(userDto.getUserLogin())
                 .userPassword(userDto.getUserPassword())
                 .userName(userDto.getUserName())
@@ -32,26 +33,27 @@ public class UsersServiceImpl implements UsersService {
                 .status(userDto.getStatus())
                 .build();
 
+        SecurityConfig.addUserSecurity(user);
         userRepository.save(user);
         return user;
     }
 
     @Override
     public void updateUser(UserDto userDto, Long id) throws Exception {
-        User userToUpdate = getUserById(id);
+        CarRentalUser userToUpdate = getUserById(id);
 
-        userRepository.save(new User(userToUpdate.getId(), userDto.getUserLogin(), userDto.getUserPassword(),
+        userRepository.save(new CarRentalUser(userToUpdate.getId(), userDto.getUserLogin(), userDto.getUserPassword(),
                 userDto.getUserName(), userDto.getUserLastName(), userDto.getUserEMail(), userDto.getUserAddress(),
                 userDto.getUserCarId(), userDto.getRole(), userDto.getStatus()));
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<CarRentalUser> getAllUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public User getUserById(Long id)   {
+    public CarRentalUser getUserById(Long id)   {
         Long userLongId = Optional.of(id)
                 .orElseThrow(() -> new UserException("No Client found in DB"));
         return userRepository.findUserById(userLongId);
@@ -59,31 +61,31 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public void deleteUserById(Long id) {
-        User userById = getUserById(id);
+        CarRentalUser userById = getUserById(id);
         userRepository.delete(userById);
     }
 
     @Override
-    public User findUserByUserLogin(String login) throws UserException{
+    public CarRentalUser findUserByUserLogin(String login) throws UserException{
         return Optional.of(login)
                 .map(this::getUserByLogin)
                 .orElseThrow(() -> new UserException("User not found!"));
     }
 
     @Override
-    public User findUserByUserEmail(String email) throws UserException{
+    public CarRentalUser findUserByUserEmail(String email) throws UserException{
         return Optional.of(email)
                 .map(this::getUserByEmail)
                 .orElseThrow(() -> new UserException("Not found User with given E-mail"));
     }
 
-    private User getUserByLogin(String login) throws UserException {
+    private CarRentalUser getUserByLogin(String login) throws UserException {
         return userRepository.findAll().stream()
                 .filter(user -> user.getUserLogin().equals(login))
                 .findFirst().orElseThrow(() -> new UserException("Not found User with given login"));
     }
 
-    private User getUserByEmail(String email) throws UserException {
+    private CarRentalUser getUserByEmail(String email) throws UserException {
         return userRepository.findAll().stream()
                 .filter(user -> user.getUserEMail().equals(email))
                 .findFirst().orElseThrow(() -> new UserException("Not found User with given E-mail"));

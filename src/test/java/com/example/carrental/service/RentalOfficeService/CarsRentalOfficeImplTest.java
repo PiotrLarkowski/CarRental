@@ -2,22 +2,16 @@ package com.example.carrental.service.RentalOfficeService;
 
 import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarStatus;
-import com.example.carrental.domain.User.User;
-import com.example.carrental.domainDto.CarDto.CarDto;
+import com.example.carrental.domain.User.CarRentalUser;
 import com.example.carrental.repository.*;
-import com.example.carrental.service.CarService.CarsService;
 import com.example.carrental.service.CarService.CarsServiceImpl;
 import com.example.carrental.service.IncomeService.IncomesService;
-import com.example.carrental.service.UserService.UsersService;
 import com.example.carrental.service.UserService.UsersServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExecutableInvoker;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.math.BigDecimal;
 
@@ -61,12 +55,12 @@ class CarsRentalOfficeImplTest {
         Mockito.when(carsRepository.findCarById(carId)).thenReturn(new Car(carId, carRentalBranchId, "Mark", "Model", "bodyType", 1990,
                 "Red", 3, CarStatus.AVAILABLE, BigDecimal.valueOf(15)));
 
-        Mockito.when(userRepository.findUserById(userId)).thenReturn(new User(userId, "Login",
+        Mockito.when(userRepository.findUserById(userId)).thenReturn(new CarRentalUser(userId, "Login",
                 "Password","name","lastName","aa@op.pl","address",
                 null,"USER","ACTIVE"));
 
         //when
-        carsRentalOfficeService.rentACar(carId,userId);
+        carsRentalOfficeService.rentACar(userId, carId);
 
         //then
         verify(userRepository,times(1)).save(Mockito.any());
@@ -95,13 +89,13 @@ class CarsRentalOfficeImplTest {
         Mockito.when(carsRepository.findCarById(carId)).thenReturn(new Car(carId, carRentalBranchId, "Mark", "Model", "bodyType", 1990,
                 "Red", 3, CarStatus.AVAILABLE, BigDecimal.valueOf(15)));
 
-        Mockito.when(userRepository.findUserById(userId)).thenReturn(new User(userId, "Login",
+        Mockito.when(userRepository.findUserById(userId)).thenReturn(new CarRentalUser(userId, "Login",
                 "Password","name","lastName","aa@op.pl","address",
                 carId,
                 "USER","ACTIVE"));
 
         //when
-        carsRentalOfficeService.rentACar(carId,userId);
+        carsRentalOfficeService.rentACar(userId, carId);
 
         //then
         verify(userRepository,times(0)).save(Mockito.any());

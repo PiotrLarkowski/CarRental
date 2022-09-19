@@ -6,11 +6,9 @@ import com.example.carrental.domain.Car.CarStatus;
 import com.example.carrental.domain.Income.Income;
 import com.example.carrental.domain.RentalOffice.CarRentalOffice;
 import com.example.carrental.domain.RentalOffice.CarRentalOfficeException;
-import com.example.carrental.domain.User.User;
+import com.example.carrental.domain.User.CarRentalUser;
 import com.example.carrental.domain.User.UserException;
 import com.example.carrental.domainDto.CarDto.CarDto;
-import com.example.carrental.domainDto.RentalOffice.CarRentalOfficeDto;
-import com.example.carrental.domainDto.RentalOffice.CarRentalOfficeList;
 import com.example.carrental.domainDto.UserDto.UserDto;
 import com.example.carrental.repository.CarsRentalOfficeRepository;
 import com.example.carrental.repository.IncomeRepository;
@@ -78,19 +76,16 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
 
     @Transactional
     @Override
-    public void returnACar(Long userId, Long carId, Long carRentalOfficeId) throws Exception {
-        changeCarStatusInCarAndUser(userId, carId, CarStatus.AVAILABLE);
+    public void returnACar(Long carRentalOfficeId) throws Exception { //TODO usunąłem podawaie car i miejsca wypożyczenia i opozostawiłem tylko id auta jakie się zwraca
+        changeCarStatusInCarAndUser(getCarRentalOfficeById(carRentalOfficeId).getUser().getId(), getCarRentalOfficeById(carRentalOfficeId).getCar().getId(), CarStatus.AVAILABLE);
         updateCarRentalOffice(carRentalOfficeId);
     }
 
     private boolean changeCarStatusInCarAndUser(Long userId, Long carId, CarStatus carStatus) throws Exception {
-        User user = getUserById(userId);
+        CarRentalUser user = getUserById(userId);
         Car carToRent = getCarById(carId);
-        if (user.getUserCarId() != null && user.getUserCarId().equals(carId)) {
-            updateCarStatus(carToRent, carStatus);
-            updateUserCarStatus(carId, carStatus, user);
-            return true;
-        } else if (user.getUserCarId() == null) {
+//        Optional.of(user.getUserCarId()).orElseThrow(() -> new CarException("User don't have a car"));
+        if (user.getUserCarId() == null || user.getUserCarId().equals(carId)) { //TODO odwróciłem kolejność i wyrzuciłem warunek z if
             updateCarStatus(carToRent, carStatus);
             updateUserCarStatus(carId, carStatus, user);
             return true;
@@ -98,7 +93,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         throw new CarRentalOfficeException("Value doesn't match, please write proper value!");
     }
 
-    private void updateUserCarStatus(Long carId, CarStatus carStatus, User user) throws Exception {
+    private void updateUserCarStatus(Long carId, CarStatus carStatus, CarRentalUser user) throws Exception {
         if (carStatus.equals(CarStatus.AVAILABLE)) {
             user.setUserCarId(null);
         } else {
@@ -154,7 +149,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         return carToRent;
     }
 
-    private boolean haveUserCarRent(User user) {
+    private boolean haveUserCarRent(CarRentalUser user) {
         if (user.getUserCarId() != null) {
             new CarException("User has already rented car");
             return false;
@@ -162,7 +157,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         return true;
     }
 
-    private User getUserById(Long userId) {
+    private CarRentalUser getUserById(Long userId) {
         return Optional.of(usersService.getUserById(userId)).orElseThrow(() -> new UserException("No client with given ID"));
     }
 

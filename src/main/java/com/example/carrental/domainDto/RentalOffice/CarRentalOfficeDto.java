@@ -1,7 +1,7 @@
 package com.example.carrental.domainDto.RentalOffice;
 
 import com.example.carrental.domain.Car.Car;
-import com.example.carrental.domain.User.User;
+import com.example.carrental.domain.User.CarRentalUser;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class CarRentalOfficeDto {
 
     @ManyToOne
-    private User user;
+    private CarRentalUser user;
 
     @ManyToOne
     private Car car;

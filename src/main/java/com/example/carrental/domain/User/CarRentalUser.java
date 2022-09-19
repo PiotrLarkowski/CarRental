@@ -1,10 +1,8 @@
 package com.example.carrental.domain.User;
 
-import com.example.carrental.domain.RentalOffice.CarRentalOffice;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
@@ -14,7 +12,7 @@ import java.util.List;
 @EqualsAndHashCode
 @Builder
 @Table(name="CarRentalUser")
-public class User {
+public class CarRentalUser {
 
     @Id
     @Column(nullable = false)

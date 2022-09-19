@@ -1,6 +1,6 @@
 package com.example.carrental.service.UserService;
 
-import com.example.carrental.domain.User.User;
+import com.example.carrental.domain.User.CarRentalUser;
 import com.example.carrental.domain.User.UserException;
 import com.example.carrental.domainDto.UserDto.UserDto;
 
@@ -8,18 +8,18 @@ import java.util.List;
 
 public interface UsersService {
 
-    User createUser(UserDto userDto);
+    CarRentalUser createUser(UserDto userDto);
 
     void updateUser(UserDto userDto, Long id) throws Exception;
 
-    List<User> getAllUsers();
+    List<CarRentalUser> getAllUsers();
 
-    User getUserById(Long id);
+    CarRentalUser getUserById(Long id);
 
     void deleteUserById(Long id) throws Exception;
 
-    User findUserByUserEmail(String email) throws UserException;
+    CarRentalUser findUserByUserEmail(String email) throws UserException;
 
-    User findUserByUserLogin(String login) throws UserException;
+    CarRentalUser findUserByUserLogin(String login) throws UserException;
 
 }
