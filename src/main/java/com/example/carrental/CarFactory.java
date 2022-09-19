@@ -5,7 +5,7 @@ import com.example.carrental.domainDto.CarDto.CarDto;
 import com.example.carrental.domainDto.RentalBranchDto.RentalBranchDto;
 import com.example.carrental.domainDto.UserDto.UserDto;
 import com.example.carrental.service.CarService.CarsService;
-import com.example.carrental.service.RentalBranchService.RentalBranchService;
+import com.example.carrental.service.RentalBranchService.RentalBranchRepository;
 import com.example.carrental.service.UserService.UsersService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -20,9 +20,9 @@ public class CarFactory implements CommandLineRunner {
 
     private final CarsService carsService;
     private final UsersService usersService;
-    private final RentalBranchService rentalBranchService;
+    private final RentalBranchRepository rentalBranchService;
 
-    public CarFactory(CarsService carsService, UsersService usersService, RentalBranchService rentalBranchService) {
+    public CarFactory(CarsService carsService, UsersService usersService, RentalBranchRepository rentalBranchService) {
         this.carsService = carsService;
         this.usersService = usersService;
         this.rentalBranchService = rentalBranchService;
@@ -34,7 +34,7 @@ public class CarFactory implements CommandLineRunner {
         providedExampleData();
     }
 
-    private void providedExampleData() {
+    private void providedExampleData() throws Exception {
         createRentalBranches();
         createExampleCars();
         createExampleUsers();
@@ -68,7 +68,7 @@ public class CarFactory implements CommandLineRunner {
         }
     }
 
-    private void createExampleCars() {
+    private void createExampleCars() throws Exception {
         List<CarDto> listCarExample = new ArrayList<>(Arrays.asList(
                 new CarDto(1L, "volvo", "XC90", "combi", 1990, "red", 19999, CarStatus.IN_REPAIR, BigDecimal.valueOf(250000L)),
                 new CarDto(1L, "vw", "passat", "combi", 1995, "green", 15999, CarStatus.AVAILABLE, BigDecimal.valueOf(150000L)),

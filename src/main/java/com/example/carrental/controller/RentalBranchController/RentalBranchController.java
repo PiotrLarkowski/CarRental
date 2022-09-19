@@ -2,7 +2,7 @@ package com.example.carrental.controller.RentalBranchController;
 
 import com.example.carrental.domain.RentalBranch.RentalBranch;
 import com.example.carrental.domainDto.RentalBranchDto.RentalBranchDto;
-import com.example.carrental.service.RentalBranchService.RentalBranchService;
+import com.example.carrental.service.RentalBranchService.RentalBranchRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +12,9 @@ import java.util.List;
 @RequestMapping(path = "/rentalBranch")
 public class RentalBranchController {
 
-    private final RentalBranchService rentalBranchService;
+    private final RentalBranchRepository rentalBranchService;
 
-    public RentalBranchController(RentalBranchService rentalBranchService) {
+    public RentalBranchController(RentalBranchRepository rentalBranchService) {
         this.rentalBranchService = rentalBranchService;
     }
 

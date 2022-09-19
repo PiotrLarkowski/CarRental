@@ -22,12 +22,12 @@ class CarsServiceImplTest {
     @Mock
     private CarsRepository carsRepository;
     @Mock
-    private RentalBranchRepository rentalBranchRepository;
+    private RentalBranchRepository rentalBranchService;
 
     @Test
     public void shouldUpdateACar() throws Exception {
 
-        CarsServiceImpl carsService = new CarsServiceImpl(carsRepository, rentalBranchRepository);
+        CarsServiceImpl carsService = new CarsServiceImpl(carsRepository, rentalBranchService);
 
         //GIVEN
         Long carId = 1L;
@@ -46,7 +46,7 @@ class CarsServiceImplTest {
     @Test
     public void shouldDeleteACar() throws Exception {
 
-        CarsServiceImpl carsService = new CarsServiceImpl(carsRepository, rentalBranchRepository);
+        CarsServiceImpl carsService = new CarsServiceImpl(carsRepository, rentalBranchService);
 
         //GIVEN
         Long carId = 1L;

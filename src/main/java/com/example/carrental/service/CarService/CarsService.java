@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface CarsService {
 
-    Car createCar(CarDto carDto, Long rentalBranchId);
+    Car createCar(CarDto carDto, Long rentalBranchId) throws Exception;
 
     void updateCar(CarDto carDto, Long id) throws Exception;
 
