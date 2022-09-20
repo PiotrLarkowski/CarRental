@@ -7,9 +7,11 @@ import com.example.carrental.domain.RentalOffice.CarRentalOfficeException;
 import com.example.carrental.domain.User.CarRentalUser;
 import com.example.carrental.repository.*;
 import com.example.carrental.service.CarService.CarsServiceImpl;
+import com.example.carrental.service.CarTestValues;
 import com.example.carrental.service.IncomeService.IncomesService;
 import com.example.carrental.repository.RentalBranchRepository.*;
 import com.example.carrental.service.UserService.UsersServiceImpl;
+import com.example.carrental.service.UserTestValues;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -23,6 +25,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class CarsRentalOfficeImplTest {
+
+    private Long carId = 1L;
+    private Long userId = 2L;
 
     @Mock
     private CarsRentalOfficeRepository carsRentalOfficeRepository;
@@ -43,22 +48,15 @@ class CarsRentalOfficeImplTest {
     public void shouldAllowUserToRentACar() throws Exception {
         //GIVEN
 
-        Long carId = 1L;
-        Long userId = 1L;
-        Long carRentalBranchId = 1L;
-
         CarsServiceImpl carService = new CarsServiceImpl(carsRepository, rentalBranchRepository);
 
         UsersServiceImpl usersService = new UsersServiceImpl(userRepository);
 
         CarsRentalOfficeImpl carsRentalOfficeService = new CarsRentalOfficeImpl(carsRentalOfficeRepository,carService,usersService,incomeService);
 
-        Mockito.when(carsRepository.findCarById(carId)).thenReturn(new Car(carId, carRentalBranchId, "Mark", "Model", "bodyType", 1990,
-                "Red", 3, CarStatus.AVAILABLE, BigDecimal.valueOf(15)));
+        Mockito.when(carsRepository.findCarById(carId)).thenReturn(CarTestValues.availableCar);
 
-        Mockito.when(userRepository.findUserById(userId)).thenReturn(new CarRentalUser(userId, "Login",
-                "Password","name","lastName","aa@op.pl","address",
-                null,"USER","ACTIVE"));
+        Mockito.when(userRepository.findUserById(userId)).thenReturn(UserTestValues.userWithNoCarRented);
 
         //WHEN
         carsRentalOfficeService.rentACar(userId, carId);
@@ -74,28 +72,20 @@ class CarsRentalOfficeImplTest {
     }
 
     @Test
-    public void shouldNotAllowUserToRentAnotherCarBecauseUsrHaveAlreadyRentACar() throws Exception {
+    public void shouldNotAllowUserToRentAnotherCarBecauseUserHaveAlreadyRentACar() throws Exception {
         //GIVEN
 
-        Long carBelongToUserId = 1L;
-        Long carThatUserWantToRent = 2L;
+        Long carThatUserWantToRent = 3L;
 
-        Long userId = 1L;
-        Long carRentalBranchId = 1L;
-
-        CarsServiceImpl carService = new CarsServiceImpl(carsRepository, (com.example.carrental.repository.RentalBranchRepository) rentalBranchRepository);
+        CarsServiceImpl carService = new CarsServiceImpl(carsRepository, rentalBranchRepository);
 
         UsersServiceImpl usersService = new UsersServiceImpl(userRepository);
 
         CarsRentalOfficeImpl carsRentalOfficeService = new CarsRentalOfficeImpl(carsRentalOfficeRepository,carService,usersService,incomeService);
 
-        Mockito.when(carsRepository.findCarById(carThatUserWantToRent)).thenReturn(new Car(3L, carRentalBranchId, "Mark", "Model", "bodyType", 1990,
-                "Red", 3, CarStatus.AVAILABLE, BigDecimal.valueOf(15)));
+        Mockito.when(carsRepository.findCarById(carThatUserWantToRent)).thenReturn(CarTestValues.availableCar);
 
-        Mockito.when(userRepository.findUserById(userId)).thenReturn(new CarRentalUser(userId, "Login",
-                "Password","name","lastName","aa@op.pl","address",
-                carBelongToUserId,
-                "USER","ACTIVE"));
+        Mockito.when(userRepository.findUserById(userId)).thenReturn(UserTestValues.userWithCarRented);
 
         //WHEN
         Exception exception = assertThrows(CarRentalOfficeException.class, () -> {
@@ -111,26 +101,18 @@ class CarsRentalOfficeImplTest {
     }
 
     @Test
-    public void shouldNotAllowUserToRentACarWitchIsNotAllowToRent() throws Exception {
+    public void shouldNotAllowUserToRentACarWitchIsNotAllowToRent() {
         //GIVEN
 
-        Long carId = 1L;
-
-        Long userId = 1L;
-        Long carRentalBranchId = 1L;
-
-        CarsServiceImpl carService = new CarsServiceImpl(carsRepository, (com.example.carrental.repository.RentalBranchRepository) rentalBranchRepository);
+        CarsServiceImpl carService = new CarsServiceImpl(carsRepository, rentalBranchRepository);
 
         UsersServiceImpl usersService = new UsersServiceImpl(userRepository);
 
         CarsRentalOfficeImpl carsRentalOfficeService = new CarsRentalOfficeImpl(carsRentalOfficeRepository,carService,usersService,incomeService);
 
-        Mockito.when(carsRepository.findCarById(carId)).thenReturn(new Car(3L, carRentalBranchId, "Mark", "Model", "bodyType", 1990,
-                "Red", 3, CarStatus.BROKEN, BigDecimal.valueOf(15)));
+        Mockito.when(carsRepository.findCarById(carId)).thenReturn(CarTestValues.brokenCar);
 
-        Mockito.when(userRepository.findUserById(userId)).thenReturn(new CarRentalUser(userId, "Login",
-                "Password","name","lastName","aa@op.pl","address",
-                null,"USER","ACTIVE"));
+        Mockito.when(userRepository.findUserById(userId)).thenReturn(UserTestValues.userWithNoCarRented);
 
         //WHEN
         Exception exception = assertThrows(CarException.class, () -> {
