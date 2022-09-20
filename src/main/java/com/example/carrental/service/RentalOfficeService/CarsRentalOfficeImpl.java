@@ -11,7 +11,6 @@ import com.example.carrental.domain.User.UserException;
 import com.example.carrental.domainDto.CarDto.CarDto;
 import com.example.carrental.domainDto.UserDto.UserDto;
 import com.example.carrental.repository.CarsRentalOfficeRepository;
-import com.example.carrental.repository.IncomeRepository;
 import com.example.carrental.service.CarService.CarsService;
 import com.example.carrental.service.IncomeService.IncomesService;
 import com.example.carrental.service.UserService.UsersService;
@@ -34,14 +33,12 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
 
     private final IncomesService incomeService;
 
-    private final IncomeRepository incomeRepository;
 
-    public CarsRentalOfficeImpl(CarsRentalOfficeRepository carsRentalOfficeRepository, CarsService carsService, UsersService usersService, IncomesService incomeService, IncomeRepository incomeRepository) {
+    public CarsRentalOfficeImpl(CarsRentalOfficeRepository carsRentalOfficeRepository, CarsService carsService, UsersService usersService, IncomesService incomeService) {
         this.carsRentalOfficeRepository = carsRentalOfficeRepository;
         this.carsService = carsService;
         this.usersService = usersService;
         this.incomeService = incomeService;
-        this.incomeRepository = incomeRepository;
     }
 
     @Override
@@ -115,7 +112,6 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
         carsRentalOfficeRepository.save(newCarRentalOffice);
 
         Income income = incomeService.createIncome(carsService.getCarById(carId).getDayPrice());
-        incomeRepository.save(income);
 
         return newCarRentalOffice;
     }

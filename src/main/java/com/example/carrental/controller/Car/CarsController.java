@@ -26,7 +26,7 @@ public class CarsController {
 
     @PostMapping(path ="/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Car createCar(@RequestBody @Valid CarDto carDto, @PathVariable Long id) {
+    public Car createCar(@RequestBody @Valid CarDto carDto, @PathVariable Long id) throws Exception {
         return carsService.createCar(carDto, id);
     }
 

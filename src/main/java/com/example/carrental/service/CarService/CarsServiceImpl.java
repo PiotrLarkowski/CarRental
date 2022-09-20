@@ -21,16 +21,16 @@ import java.util.stream.Collectors;
 public class CarsServiceImpl implements CarsService {
 
     private final CarsRepository carsRepository;
-    private final RentalBranchRepository rentalBranchRepository;
+    private final RentalBranchRepository rentalBranchService;
 
-    public CarsServiceImpl(CarsRepository carsRepository, RentalBranchRepository rentalBranchRepository) {
+    public CarsServiceImpl(CarsRepository carsRepository, RentalBranchRepository rentalBranchService) {
         this.carsRepository = carsRepository;
-        this.rentalBranchRepository = rentalBranchRepository;
+        this.rentalBranchService = rentalBranchService;
     }
 
     @Override
-    public Car createCar(CarDto carDto, Long rentalBranchId) {
-        RentalBranch rentalBranchById = rentalBranchRepository.findRentalBranchById(rentalBranchId);
+    public Car createCar(CarDto carDto, Long rentalBranchId) throws Exception {
+        RentalBranch rentalBranchById = rentalBranchService.findRentalBranchById(rentalBranchId);
         Car car = Car.builder()
                 .rentalBranchId(rentalBranchId)
                 .mark(carDto.getMark())

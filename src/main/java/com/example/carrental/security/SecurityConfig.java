@@ -49,7 +49,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         inMemoryUserDetailsManager.createUser(user);
         inMemoryUserDetailsManager.createUser(moderator);
         return inMemoryUserDetailsManager;
-//        return new InMemoryUserDetailsManager(admin, user, moderator);
     }
 
     @Override
