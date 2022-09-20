@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class RentalBranchServiceImpl implements com.example.carrental.service.RentalBranchService.RentalBranchRepository {
+public class RentalBranchServiceImpl implements RentalBranchSerwis {
 
     private final RentalBranchRepository rentalBranchRepository;
 

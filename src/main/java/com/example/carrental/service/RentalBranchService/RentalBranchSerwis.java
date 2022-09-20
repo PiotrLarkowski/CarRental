@@ -6,7 +6,7 @@ import com.example.carrental.domainDto.RentalBranchDto.RentalBranchDto;
 
 import java.util.List;
 
-public interface RentalBranchRepository {
+public interface RentalBranchSerwis {
 
     RentalBranch getRentalBranchById(Long id) throws Exception;
 

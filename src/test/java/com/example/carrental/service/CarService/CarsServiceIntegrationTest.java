@@ -1,33 +1,34 @@
 package com.example.carrental.service.CarService;
 
+import com.example.carrental.domain.Car.Car;
 import com.example.carrental.repository.CarsRepository;
 import com.example.carrental.service.CarTestValues;
 import com.example.carrental.repository.RentalBranchRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Profile("Test")
 class CarsServiceIntegrationTest {
 
-    @Mock
+    @Autowired
     CarsRepository carsRepository;
 
-    @Mock
+    @Autowired
     RentalBranchRepository rentalBranchRepository;
 
     @Test
-    public void shouldCreateProperObjectCar() throws Exception {
+    public void shouldVeryfyThetCarIsAssignedToRentalBranchAfterCreation() throws Exception {
         //GIVEN
         CarsServiceImpl carsService = new CarsServiceImpl(carsRepository, rentalBranchRepository);
-//        Mockito.when(RentalBranch.getCars()).thenReturn
         //WHEN
-        carsService.createCar(CarTestValues.availableCarDto, 1L);
+        Car car = carsService.createCar(CarTestValues.availableCarDto, 1L);
 
         //THEN
-
+        assertThat(carsRepository.findCarById(car.getId())).isNotNull();
+        assertThat(rentalBranchRepository.findRentalBranchById(1L).getCars().contains(car)).isTrue();
     }
 
 }

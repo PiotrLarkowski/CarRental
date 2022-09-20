@@ -56,7 +56,7 @@ public class CarsController {
         return carsService.filterCarsByMark(Mark);
     }
 
-    @GetMapping(path = "/filterByYearOfProduction/{YearOfProduction}")
+    @GetMapping(path = "/filterByYearOfProduction/{yearOfProduction}")
     public List<Car> filterCarsByYearOfProduction(@PathVariable int yearOfProduction) {
         return carsService.filterCarsByYearOfProduction(yearOfProduction);
     }

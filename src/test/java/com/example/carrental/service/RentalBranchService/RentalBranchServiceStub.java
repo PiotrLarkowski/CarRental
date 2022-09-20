@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Profile("Test")
-class RentalBranchServiceStub implements RentalBranchRepository {
+class RentalBranchServiceStub implements RentalBranchSerwis {
 
     @Override
     public RentalBranch getRentalBranchById(Long id) throws Exception {

@@ -5,7 +5,7 @@ import com.example.carrental.domainDto.CarDto.CarDto;
 import com.example.carrental.domainDto.RentalBranchDto.RentalBranchDto;
 import com.example.carrental.domainDto.UserDto.UserDto;
 import com.example.carrental.service.CarService.CarsService;
-import com.example.carrental.service.RentalBranchService.RentalBranchRepository;
+import com.example.carrental.service.RentalBranchService.RentalBranchSerwis;
 import com.example.carrental.service.UserService.UsersService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -20,9 +20,9 @@ public class CarFactory implements CommandLineRunner {
 
     private final CarsService carsService;
     private final UsersService usersService;
-    private final RentalBranchRepository rentalBranchService;
+    private final RentalBranchSerwis rentalBranchService;
 
-    public CarFactory(CarsService carsService, UsersService usersService, RentalBranchRepository rentalBranchService) {
+    public CarFactory(CarsService carsService, UsersService usersService, RentalBranchSerwis rentalBranchService) {
         this.carsService = carsService;
         this.usersService = usersService;
         this.rentalBranchService = rentalBranchService;

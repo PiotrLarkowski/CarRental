@@ -28,6 +28,7 @@ public class CarsServiceImpl implements CarsService {
         this.rentalBranchService = rentalBranchService;
     }
 
+    @Transactional
     @Override
     public Car createCar(CarDto carDto, Long rentalBranchId) throws Exception {
         RentalBranch rentalBranchById = rentalBranchService.findRentalBranchById(rentalBranchId);
