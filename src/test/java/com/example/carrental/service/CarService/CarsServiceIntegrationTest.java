@@ -22,7 +22,7 @@ class CarsServiceIntegrationTest {
     public void shouldCreateProperObjectCar() throws Exception {
         //GIVEN
         CarsServiceImpl carsService = new CarsServiceImpl(carsRepository, rentalBranchRepository);
-
+//        Mockito.when(RentalBranch.getCars()).thenReturn
         //WHEN
         carsService.createCar(CarTestValues.availableCarDto, 1L);
 

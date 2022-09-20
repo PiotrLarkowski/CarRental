@@ -53,6 +53,6 @@ public class IncomeServiceImpl implements IncomesService {
     public Income getIncomeById(Long id) {
         Long incomeId = Optional.of(id)
                 .orElseThrow(() -> new IncomeException("No income found in DB"));
-        return incomeRepository.findById(incomeId).get();
+        return incomeRepository.findIncomeById(incomeId);
     }
 }

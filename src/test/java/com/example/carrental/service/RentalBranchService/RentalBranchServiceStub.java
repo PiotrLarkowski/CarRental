@@ -30,7 +30,7 @@ class RentalBranchServiceStub implements RentalBranchRepository {
     }
 
     @Override
-    public List<Car> getAllCarsFromBranch(Long id) throws Exception {
+    public List<Car> getAllCarsFromBranch(Long id) {
         return new ArrayList<>(Arrays.asList(CarTestValues.availableCar,CarTestValues.availableCar));
     }
 
