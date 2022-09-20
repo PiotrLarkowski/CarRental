@@ -1,7 +1,6 @@
 package com.example.carrental.domainDto.UserDto;
 
 import lombok.*;
-
 @Getter
 @Setter
 @NoArgsConstructor

@@ -88,7 +88,7 @@ class CarsRentalOfficeImplTest {
         Mockito.when(userRepository.findUserById(userId)).thenReturn(UserTestValues.userWithCarRented);
 
         //WHEN
-        Exception exception = assertThrows(CarRentalOfficeException.class, () -> {
+        assertThrows(CarRentalOfficeException.class, () -> {
             carsRentalOfficeService.rentACar(userId, carThatUserWantToRent);
         });
 
@@ -115,7 +115,7 @@ class CarsRentalOfficeImplTest {
         Mockito.when(userRepository.findUserById(userId)).thenReturn(UserTestValues.userWithNoCarRented);
 
         //WHEN
-        Exception exception = assertThrows(CarException.class, () -> {
+        assertThrows(CarException.class, () -> {
             carsRentalOfficeService.rentACar(userId, carId);
         });
 

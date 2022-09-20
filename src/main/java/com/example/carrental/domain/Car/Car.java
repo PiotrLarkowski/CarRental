@@ -1,11 +1,9 @@
 package com.example.carrental.domain.Car;
 
-import com.example.carrental.domain.RentalOffice.CarRentalOffice;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 
 
 @Entity

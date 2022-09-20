@@ -14,6 +14,7 @@ import com.example.carrental.repository.CarsRentalOfficeRepository;
 import com.example.carrental.service.CarService.CarsService;
 import com.example.carrental.service.IncomeService.IncomesService;
 import com.example.carrental.service.UserService.UsersService;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -111,7 +112,7 @@ public class CarsRentalOfficeImpl implements CarRentalOfficeService {
                 .build();
         carsRentalOfficeRepository.save(newCarRentalOffice);
 
-        Income income = incomeService.createIncome(carsService.getCarById(carId).getDayPrice());
+        incomeService.createIncome(carsService.getCarById(carId).getDayPrice());
 
         return newCarRentalOffice;
     }

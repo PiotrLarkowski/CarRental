@@ -20,19 +20,16 @@ public class CarRentalOfficeContoller {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<CarRentalOffice> getAllCarRentalOffice(){
         return carRentalOfficeService.getAllCarRentalOffices();
     }
 
     @GetMapping(path="/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public CarRentalOffice getCarRentalOfficeById(@PathVariable @Valid Long id){
         return carRentalOfficeService.getCarRentalOfficeById(id);
     }
 
     @GetMapping(path = "/dateTime/{localDateTime}")
-    @ResponseStatus(HttpStatus.OK)
     public List<CarRentalOffice> getCarRentalOfficeByDateTime(@PathVariable LocalDateTime localDateTime){
         return carRentalOfficeService.findCarRentalOfficeByLocalDateTimeOfRent(localDateTime);
     }

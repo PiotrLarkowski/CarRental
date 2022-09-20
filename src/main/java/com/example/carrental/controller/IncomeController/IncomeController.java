@@ -21,7 +21,6 @@ public class IncomeController {
     }
 
     @GetMapping(path = "/month/{month}")
-    @ResponseStatus(HttpStatus.OK)
     public BigDecimal getMonthlyIncome(@PathVariable Month month){
         return incomesService.getMonthlyIncome(month);
     }

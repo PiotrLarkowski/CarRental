@@ -29,6 +29,4 @@ public class RentalBranch {
 
     private String postCode;
 
-
-
 }

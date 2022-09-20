@@ -28,7 +28,6 @@ public class UserController {
     }
 
     @PostMapping(path = "/log/in")
-    @ResponseStatus(HttpStatus.OK)
     public CarRentalUser sendUser(@RequestBody @Valid @NotNull UserDto userDto){
         return usersService.findUserByUserLogin(userDto.getUserLogin());
     }

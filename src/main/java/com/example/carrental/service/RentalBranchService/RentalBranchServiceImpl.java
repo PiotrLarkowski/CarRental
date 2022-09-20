@@ -51,9 +51,8 @@ public class RentalBranchServiceImpl implements com.example.carrental.service.Re
 
     @Override
     public void deleteRentalBranch(Long id) throws Exception{
-        validId(id);
-        rentalBranchRepository.deleteById(id);
-//        carsRepository.findAll().stream().forEach(car -> car.getRentalBranchId() == );
+        RentalBranch rentalBranch = validId(id);
+        rentalBranchRepository.delete(rentalBranch);
     }
 
     private RentalBranch validId(Long id) throws Exception{

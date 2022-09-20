@@ -51,6 +51,16 @@ public class CarsController {
         return carsService.filterCarsByBodyType(bodyType);
     }
 
+    @GetMapping(path = "/filterByMark/{Mark}")
+    public List<Car> filterCarsByMark(@PathVariable String Mark) {
+        return carsService.filterCarsByMark(Mark);
+    }
+
+    @GetMapping(path = "/filterByYearOfProduction/{YearOfProduction}")
+    public List<Car> filterCarsByYearOfProduction(@PathVariable int yearOfProduction) {
+        return carsService.filterCarsByYearOfProduction(yearOfProduction);
+    }
+
     @GetMapping(path = "/filterByPrice")
     public List<Car> filterCarsByPrice(@RequestParam BigDecimal from, @RequestParam BigDecimal to) {
         return carsService.filterCarsByDayPrice(from, to);
@@ -62,7 +72,6 @@ public class CarsController {
     }
 
     @DeleteMapping(path = "/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public void deleteCar(@PathVariable Long id) throws CarException {
         carsService.deleteCarById(id);
     }
