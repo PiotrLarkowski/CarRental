@@ -1,4 +1,4 @@
-package com.example.carrental.controller.User;
+package com.example.carrental.controller;
 
 import com.example.carrental.domain.User.CarRentalUser;
 import com.example.carrental.domainDto.UserDto.UserDto;
@@ -38,7 +38,6 @@ public class UserController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.FOUND)
     public Collection<CarRentalUser> getAllUser(){
         return usersService.getAllUsers();
     }
@@ -54,13 +53,11 @@ public class UserController {
     }
 
     @GetMapping(path="/userEmail/{email}")
-    @ResponseStatus(HttpStatus.FOUND)
     public CarRentalUser findUserByEmail(@PathVariable String email){
         return usersService.findUserByUserEmail(email);
     }
 
     @GetMapping(path="/userLogin/{login}")
-    @ResponseStatus(HttpStatus.FOUND)
     public CarRentalUser findUserByLogin(@PathVariable String login){
         return usersService.findUserByUserLogin(login);
     }

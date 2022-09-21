@@ -1,4 +1,4 @@
-package com.example.carrental.controller.RentalBranchController;
+package com.example.carrental.controller;
 
 import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.RentalBranch.RentalBranch;
@@ -7,6 +7,7 @@ import com.example.carrental.service.RentalBranchService.RentalBranchSerwis;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class RentalBranchController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RentalBranch createRentalBranch(@RequestBody RentalBranchDto rentalBranchDto){
+    public RentalBranch createRentalBranch(@RequestBody @Valid RentalBranchDto rentalBranchDto){
         return rentalBranchService.createRentalBranch(rentalBranchDto);
     }
     @GetMapping(path = "/allCars/{id}")

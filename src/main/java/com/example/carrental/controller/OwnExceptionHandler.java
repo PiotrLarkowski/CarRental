@@ -42,4 +42,9 @@ public class OwnExceptionHandler {
     public ResponseEntity<?> getResponseHttpRentalBranchNotFound(){
         return ResponseEntity.notFound().build();
     }
+
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<?> getCommonException(){
+        return ResponseEntity.noContent().build();
+    }
 }

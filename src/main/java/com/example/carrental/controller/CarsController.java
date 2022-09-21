@@ -1,4 +1,4 @@
-package com.example.carrental.controller.Car;
+package com.example.carrental.controller;
 
 import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarException;
@@ -36,7 +36,6 @@ public class CarsController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.FOUND)
     public List<Car> getAllCars() {
         return carsService.getAllCars();
     }

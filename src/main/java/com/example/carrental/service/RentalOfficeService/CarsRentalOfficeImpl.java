@@ -3,7 +3,6 @@ package com.example.carrental.service.RentalOfficeService;
 import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.Car.CarException;
 import com.example.carrental.domain.Car.CarStatus;
-import com.example.carrental.domain.Income.Income;
 import com.example.carrental.domain.RentalOffice.CarRentalOffice;
 import com.example.carrental.domain.RentalOffice.CarRentalOfficeException;
 import com.example.carrental.domain.User.CarRentalUser;
@@ -14,7 +13,6 @@ import com.example.carrental.repository.CarsRentalOfficeRepository;
 import com.example.carrental.service.CarService.CarsService;
 import com.example.carrental.service.IncomeService.IncomesService;
 import com.example.carrental.service.UserService.UsersService;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

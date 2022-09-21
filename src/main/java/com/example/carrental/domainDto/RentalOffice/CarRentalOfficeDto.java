@@ -3,8 +3,8 @@ package com.example.carrental.domainDto.RentalOffice;
 import com.example.carrental.domain.Car.Car;
 import com.example.carrental.domain.User.CarRentalUser;
 import lombok.*;
+import org.jetbrains.annotations.NotNull;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,10 +15,10 @@ import java.time.LocalDateTime;
 @Builder
 public class CarRentalOfficeDto {
 
-    @ManyToOne
+    @NotNull
     private CarRentalUser user;
 
-    @ManyToOne
+    @NotNull
     private Car car;
 
     private LocalDateTime localDateTimeOfRent;

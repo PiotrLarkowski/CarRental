@@ -1,6 +1,7 @@
 package com.example.carrental.domainDto.RentalOffice;
 
 import lombok.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -12,8 +13,11 @@ import java.time.LocalDateTime;
 @Builder
 public class CarRentalOfficeList {
 
+    @NotNull
     String userName;
 
+
+    @NotNull
     Long carId;
 
     private LocalDateTime localDateTimeOfRent;

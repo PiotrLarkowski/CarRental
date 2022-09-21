@@ -1,4 +1,4 @@
-package com.example.carrental.controller.IncomeController;
+package com.example.carrental.controller;
 
 import com.example.carrental.domain.Income.Income;
 import com.example.carrental.domain.Income.IncomeException;
@@ -26,13 +26,11 @@ public class IncomeController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.FOUND)
     public List<Income> getAllIncomes() {
         return incomesService.getAllIncomes();
     }
 
     @GetMapping(path = "/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
     public Income getIncomeById(@PathVariable Long id) throws IncomeException {
         return incomesService.getIncomeById(id);
     }
